@@ -1,4 +1,5 @@
 "use strict";
+process.setMaxListeners(15);
 Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
