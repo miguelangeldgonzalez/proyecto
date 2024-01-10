@@ -1,4 +1,5 @@
 "use strict";
+console.log("main.js")
 require('events').EventEmitter.defaultMaxListeners = 100;
 require('events').EventEmitter.prototype._maxListeners = 100;
 
