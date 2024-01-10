@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "npm i -g @nestjs/cli",
+    "prebuild": "npm i -g @nestjs/cli",
+    "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "node dist/src/main.js --trace-warnings",
     "start:dev": "nest start --watch",
