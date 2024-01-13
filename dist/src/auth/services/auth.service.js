@@ -14,10 +14,10 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const bcrypt_1 = require("bcrypt");
-const jwt_1 = require("@nestjs/jwt");
-const common_1 = require("@nestjs/common");
 const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
+const jwt_1 = require("@nestjs/jwt");
+const common_1 = require("@nestjs/common");
 const user_entity_1 = require("../../user/entities/user.entity");
 let AuthService = class AuthService {
     constructor(jwtService, userRepo) {
@@ -56,10 +56,9 @@ let AuthService = class AuthService {
         });
         if (user) {
             const isMatch = await (0, bcrypt_1.compare)(password, user.password);
+            delete user.password;
             if (isMatch) {
-                return {
-                    accessToken: this.generateLoginJwt(user)
-                };
+                return Object.assign(Object.assign({}, user), { accessToken: this.generateLoginJwt(user) });
             }
             return null;
         }

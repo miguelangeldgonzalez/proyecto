@@ -21,8 +21,8 @@ let LocalStrategy = class LocalStrategy extends (0, passport_1.PassportStrategy)
         });
         this.authService = authService;
     }
-    async validate(username, password) {
-        const accessToken = await this.authService.login(username, password);
+    async validate(email, password) {
+        const accessToken = await this.authService.login(email, password);
         if (!accessToken) {
             throw new common_1.UnauthorizedException();
         }

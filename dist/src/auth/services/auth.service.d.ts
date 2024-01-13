@@ -1,7 +1,8 @@
-import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
-import { User } from 'src/user/entities/user.entity';
+import { JwtService } from '@nestjs/jwt';
+import { ReturnLoginUserDto } from '../dto/auth.dto';
 import { ReturnVerifyTokenDto } from '../dto/token.dto';
+import { User } from 'src/user/entities/user.entity';
 export declare class AuthService {
     private jwtService;
     private userRepo;
@@ -11,7 +12,5 @@ export declare class AuthService {
     };
     verifyToken<T>(token: string): T & ReturnVerifyTokenDto;
     private generateLoginJwt;
-    login(email: any, password: any): Promise<{
-        accessToken: string;
-    }>;
+    login(email: any, password: any): Promise<ReturnLoginUserDto>;
 }
