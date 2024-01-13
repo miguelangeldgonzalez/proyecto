@@ -1,12 +1,14 @@
 import { compare } from 'bcrypt'; 
-import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
-import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
-
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { JsonWebTokenError, JwtService } from '@nestjs/jwt';
+import { ForbiddenException, Injectable } from '@nestjs/common';
+
+// DTOs
+import { ReturnLoginUserDto } from '../dto/auth.dto';
+import { ReturnVerifyTokenDto } from '../dto/token.dto';
 
 import { User } from 'src/user/entities/user.entity';
-import { ReturnVerifyTokenDto } from '../dto/token.dto';
 
 @Injectable()
 export class AuthService {
@@ -46,7 +48,7 @@ export class AuthService {
         return this.jwtService.sign({...user});
     }
 
-    async login(email, password) {
+    async login(email, password): Promise<ReturnLoginUserDto> {
         const user = await this.userRepo.findOne({
             where: {
                 email
@@ -56,9 +58,11 @@ export class AuthService {
 
         if (user) {
             const isMatch = await compare(password, user.password);
+            delete user.password;
 
             if (isMatch) {
                 return {
+                    ...user,
                     accessToken: this.generateLoginJwt(user)
                 }
             }
