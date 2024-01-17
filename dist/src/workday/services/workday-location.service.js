@@ -17,6 +17,7 @@ const typeorm_1 = require("typeorm");
 const typeorm_2 = require("@nestjs/typeorm");
 const common_1 = require("@nestjs/common");
 const workday_location_entity_1 = require("../entities/workday_location.entity");
+const role_entity_1 = require("../../auth/entities/role.entity");
 const zone_service_1 = require("../../location/services/zone.service");
 let WorkdayLocationService = class WorkdayLocationService {
     constructor(workdayLocationRepo, zoneService) {
@@ -48,6 +49,28 @@ let WorkdayLocationService = class WorkdayLocationService {
         if (!location)
             throw new common_1.NotFoundException('No se encontró la locacion con la jornada especificada');
         return location;
+    }
+    async getWorkdayLocations(roleName, stateIds) {
+        const relations = ['borough', 'borough.municipality', 'borough.municipality.state'];
+        switch (roleName) {
+            case role_entity_1.RoleNames.ADMIN:
+                return await this.workdayLocationRepo.find({
+                    relations
+                });
+            case role_entity_1.RoleNames.STATE_MANAGER:
+                return await this.workdayLocationRepo.find({
+                    relations,
+                    where: {
+                        borough: {
+                            municipality: {
+                                state: {
+                                    id: (0, typeorm_1.In)(stateIds)
+                                }
+                            }
+                        }
+                    }
+                });
+        }
     }
 };
 WorkdayLocationService = __decorate([

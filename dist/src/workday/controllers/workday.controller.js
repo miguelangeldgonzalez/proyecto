@@ -29,6 +29,13 @@ let WorkdayController = class WorkdayController {
     async create(body) {
         return await this.workdayService.create(body);
     }
+    async getWorkdays({ user }) {
+        let stateIds = user.role.name === role_entity_1.RoleNames.ADMIN ?
+            null :
+            user.states.map(state => state.id);
+        const role = user.role.name;
+        return await this.workdayService.getWorkdays(role, stateIds);
+    }
 };
 __decorate([
     (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
@@ -40,6 +47,14 @@ __decorate([
     __metadata("design:paramtypes", [workday_dto_1.CreateWorkdayDTO]),
     __metadata("design:returntype", Promise)
 ], WorkdayController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)(),
+    openapi.ApiResponse({ status: 200, type: [require("../entities/workday.entity").Workday] }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], WorkdayController.prototype, "getWorkdays", null);
 WorkdayController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('workday'),

@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.WorkdayLocationController = void 0;
 const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
+const zone_guard_1 = require("../../auth/guards/zone.guard");
 const role_guard_1 = require("../../auth/guards/role.guard");
 const role_entity_1 = require("../../auth/entities/role.entity");
 const role_decorator_1 = require("../../auth/decorators/role.decorator");
 const jwt_auth_guard_1 = require("../../auth/guards/jwt-auth.guard");
-const zone_guard_1 = require("../../auth/guards/zone.guard");
 const workday_location_dto_1 = require("../dtos/workday-location.dto");
 const workday_location_service_1 = require("../services/workday-location.service");
 let WorkdayLocationController = class WorkdayLocationController {
@@ -28,6 +28,13 @@ let WorkdayLocationController = class WorkdayLocationController {
     }
     async create(body) {
         return await this.workdayLocationService.create(body);
+    }
+    async getWorkdayLocations({ user }) {
+        let stateIds = user.role.name === role_entity_1.RoleNames.ADMIN ?
+            null :
+            user.states.map(state => state.id);
+        const role = user.role.name;
+        return await this.workdayLocationService.getWorkdayLocations(role, stateIds);
     }
 };
 __decorate([
@@ -40,6 +47,15 @@ __decorate([
     __metadata("design:paramtypes", [workday_location_dto_1.CreateWorkdayLocationDTO]),
     __metadata("design:returntype", Promise)
 ], WorkdayLocationController.prototype, "create", null);
+__decorate([
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
+    (0, common_1.Get)(),
+    openapi.ApiResponse({ status: 200, type: [require("../entities/workday_location.entity").WorkdayLocation] }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], WorkdayLocationController.prototype, "getWorkdayLocations", null);
 WorkdayLocationController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('workday-location'),

@@ -20,6 +20,7 @@ const workday_entity_1 = require("../entities/workday.entity");
 const media_type_entity_1 = require("../entities/media_type.entity");
 const external_assistance_entity_1 = require("../entities/external_assistance.entity");
 const workday_location_service_1 = require("./workday-location.service");
+const role_entity_1 = require("../../auth/entities/role.entity");
 let WorkdayService = class WorkdayService {
     constructor(workdayLocationService, workdayRepo, mediaTypeRepo, externalAssistanceRepo) {
         this.workdayLocationService = workdayLocationService;
@@ -75,6 +76,40 @@ let WorkdayService = class WorkdayService {
         if (!workday)
             throw new common_1.UnauthorizedException(`La jornada con el id ${id} ya se cerró`);
         return true;
+    }
+    async getWorkdays(role, stateIds) {
+        const relations = ['workdayLocation', 'workdayLocation.borough', 'workdayLocation.borough.municipality', 'workdayLocation.borough.municipality.state', 'mediaTypes', 'externalAssistance'];
+        const order = { endTime: 'DESC' };
+        const where = {
+            workdayLocation: {
+                borough: {
+                    municipality: {
+                        state: {
+                            id: (0, typeorm_1.In)(stateIds)
+                        }
+                    }
+                }
+            }
+        };
+        switch (role) {
+            case role_entity_1.RoleNames.ADMIN:
+                return await this.workdayRepo.find({
+                    relations,
+                    order
+                });
+            case role_entity_1.RoleNames.STATE_MANAGER:
+                return await this.workdayRepo.find({
+                    where,
+                    relations,
+                    order
+                });
+            case role_entity_1.RoleNames.VOLUNTEER:
+                return await this.workdayRepo.find({
+                    where: Object.assign({ endTime: (0, typeorm_1.LessThan)(new Date(Date.now())) }, where),
+                    relations: ['workdayLocation', 'workdayLocation.borough'],
+                    order
+                });
+        }
     }
 };
 WorkdayService = __decorate([

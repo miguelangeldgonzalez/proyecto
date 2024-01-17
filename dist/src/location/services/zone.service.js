@@ -35,6 +35,31 @@ let ZoneService = class ZoneService {
             });
         return states;
     }
+    async getStates(ids) {
+        if (ids)
+            return await this.getStatesById(ids);
+        return await this.stateRepo.find();
+    }
+    async getMunicipalitiesByStateId(id) {
+        const municipalities = await this.municipalityRepo.find({
+            where: { state: { id } }
+        });
+        if (municipalities.length == 0)
+            throw new common_1.NotFoundException({
+                message: `No se encontraron municipios para el estado ${id}`
+            });
+        return municipalities;
+    }
+    async getBoroughsByMunicipalityId(id) {
+        const boroughs = await this.boroughRepo.find({
+            where: { municipality: { id } }
+        });
+        if (boroughs.length == 0)
+            throw new common_1.NotFoundException({
+                message: `No se encontraron parroquias para el municipio ${id}`
+            });
+        return boroughs;
+    }
     async validateBoroughInStates(boroughId, stateIds) {
         return await this.boroughRepo.findOne({
             where: {

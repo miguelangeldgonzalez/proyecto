@@ -1,5 +1,6 @@
 import { Repository } from 'typeorm';
 import { WorkdayLocation } from '../entities/workday_location.entity';
+import { RoleNames } from 'src/auth/entities/role.entity';
 import { ZoneService } from 'src/location/services/zone.service';
 import { CreateWorkdayLocationDTO } from '../dtos/workday-location.dto';
 export declare class WorkdayLocationService {
@@ -9,4 +10,5 @@ export declare class WorkdayLocationService {
     create(data: CreateWorkdayLocationDTO): Promise<WorkdayLocation>;
     getById(id: number): Promise<WorkdayLocation>;
     getByWorkdayId(workdayId: number): Promise<WorkdayLocation>;
+    getWorkdayLocations(roleName: RoleNames, stateIds?: number[]): Promise<WorkdayLocation[]>;
 }

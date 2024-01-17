@@ -13,13 +13,15 @@ const state_entity_1 = require("./entities/state.entity");
 const borough_entity_1 = require("./entities/borough.entity");
 const municipality_entity_1 = require("./entities/municipality.entity");
 const zone_service_1 = require("./services/zone.service");
+const zone_controller_1 = require("./controllers/zone.controller");
 let LocationModule = class LocationModule {
 };
 LocationModule = __decorate([
     (0, common_1.Module)({
         imports: [typeorm_1.TypeOrmModule.forFeature([state_entity_1.State, municipality_entity_1.Municipality, borough_entity_1.Borough])],
         providers: [zone_service_1.ZoneService],
-        exports: [zone_service_1.ZoneService]
+        exports: [zone_service_1.ZoneService],
+        controllers: [zone_controller_1.ZoneController]
     })
 ], LocationModule);
 exports.LocationModule = LocationModule;

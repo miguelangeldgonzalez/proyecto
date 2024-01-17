@@ -8,6 +8,9 @@ export declare class ZoneService {
     private municipalityRepo;
     constructor(stateRepo: Repository<State>, boroughRepo: Repository<Borough>, municipalityRepo: Repository<Municipality>);
     getStatesById(ids: number[]): Promise<State[]>;
+    getStates(ids?: number[]): Promise<State[]>;
+    getMunicipalitiesByStateId(id: number): Promise<Municipality[]>;
+    getBoroughsByMunicipalityId(id: number): Promise<Borough[]>;
     validateBoroughInStates(boroughId: number, stateIds: number[]): Promise<Borough | null>;
     findBoroughById(id: number): Promise<Borough>;
 }
