@@ -19,6 +19,8 @@ export class ZoneController {
     getStates(@Query('ids') ids?: string): Promise<State[]> {
         let stateIds: number[];
 
+        if (!ids) return this.zoneService.getStates();
+        
         try {
             stateIds = JSON.parse(ids);
         } catch {
