@@ -15,6 +15,9 @@ export interface JwtCreateUserReturn extends Request {
     }
 }
 
+/**
+ * This is the decrypted user object that is returned by the JwtAuthGuard
+ */
 export interface JwtUser extends User {
     iat: number;
     exp: number;

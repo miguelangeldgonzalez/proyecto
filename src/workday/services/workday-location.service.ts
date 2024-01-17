@@ -1,10 +1,11 @@
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 // Entities
 import { WorkdayLocation } from '../entities/workday_location.entity';
 
+import { RoleNames } from 'src/auth/entities/role.entity';
 import { ZoneService } from 'src/location/services/zone.service';
 import { CreateWorkdayLocationDTO } from '../dtos/workday-location.dto';
 
@@ -65,5 +66,35 @@ export class WorkdayLocationService {
         if (!location) throw new NotFoundException('No se encontró la locacion con la jornada especificada');
 
         return location;
+    }
+
+    /**
+     * Return all workday locations if the user is an admin otherwise return the locations 
+     * of the states the state managers is in charge of
+     * @param user 
+     * @returns 
+     */
+    async getWorkdayLocations(roleName: RoleNames, stateIds?: number[]): Promise<WorkdayLocation[]> {
+        const relations = ['borough', 'borough.municipality', 'borough.municipality.state'];
+
+        switch (roleName) {
+            case RoleNames.ADMIN:
+                return await this.workdayLocationRepo.find({
+                    relations
+                })
+            case RoleNames.STATE_MANAGER:
+                return await this.workdayLocationRepo.find({
+                    relations,
+                    where: {
+                        borough: {
+                            municipality: {
+                                state: {
+                                    id: In(stateIds)
+                                }
+                            }
+                        }
+                    }
+                })  
+        }
     }
 }

@@ -1,10 +1,10 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 
 // Auth
 import { RoleGuard } from 'src/auth/guards/role.guard';
 import { RoleNames } from 'src/auth/entities/role.entity';
 import { Roles } from 'src/auth/decorators/role.decorator';
-import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { JwtAuthGuard, JwtUser } from 'src/auth/guards/jwt-auth.guard';
 
 import { CreateWorkdayDTO } from '../dtos/workday.dto';
 import { ZoneGuard } from 'src/auth/guards/zone.guard';
@@ -22,5 +22,16 @@ export class WorkdayController {
     @Post()
     async create(@Body() body: CreateWorkdayDTO) {
         return await this.workdayService.create(body);
+    }
+
+    @Get()
+    async getWorkdays(@Req() { user } : { user: JwtUser } ) {
+        let stateIds = user.role.name === RoleNames.ADMIN ? 
+                null : 
+                user.states.map(state => state.id);
+
+        const role = user.role.name as RoleNames;
+
+        return await this.workdayService.getWorkdays(role, stateIds);
     }
 }

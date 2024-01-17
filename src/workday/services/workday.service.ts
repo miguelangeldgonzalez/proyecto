@@ -1,4 +1,4 @@
-import { In, LessThan, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, In, LessThan, Repository } from 'typeorm';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -9,6 +9,7 @@ import { ExternalAssistance } from '../entities/external_assistance.entity';
 
 import { CreateWorkdayDTO } from '../dtos/workday.dto';
 import { WorkdayLocationService } from './workday-location.service';
+import { RoleNames } from 'src/auth/entities/role.entity';
 
 @Injectable()
 export class WorkdayService {
@@ -77,6 +78,11 @@ export class WorkdayService {
         return workday;
     }
 
+    /**
+     * Verify if a workday is active based on the endTime
+     * @param id 
+     * @returns 
+     */
     async checkActiveWorkday(id: number) {
         const workday = await this.workdayRepo.findOne({
             where: { 
@@ -88,5 +94,44 @@ export class WorkdayService {
         if (!workday) throw new UnauthorizedException(`La jornada con el id ${id} ya se cerró`);
 
         return true;
+    }
+
+    async getWorkdays(role: RoleNames, stateIds?: number[]) {
+        const relations: Array<string> = ['workdayLocation', 'workdayLocation.borough', 'workdayLocation.borough.municipality', 'workdayLocation.borough.municipality.state', 'mediaTypes', 'externalAssistance'];
+        const order: FindOptionsOrder<Workday> = { endTime: 'DESC' };
+        const where: FindOptionsWhere<Workday> = {
+            workdayLocation: {
+                borough: {
+                    municipality: {
+                        state: {
+                            id: In(stateIds)
+                        }
+                    }
+                }
+            }
+        }
+
+        switch (role) {
+            case RoleNames.ADMIN:
+                return await this.workdayRepo.find({
+                    relations,
+                    order
+                });
+            case RoleNames.STATE_MANAGER:
+                return await this.workdayRepo.find({
+                    where,
+                    relations,
+                    order
+                });
+            case RoleNames.VOLUNTEER:
+                return await this.workdayRepo.find({
+                    where: {
+                        endTime: LessThan(new Date(Date.now())),
+                        ...where
+                    },
+                    relations: ['workdayLocation', 'workdayLocation.borough'],
+                    order
+                });
+        }
     }
 }

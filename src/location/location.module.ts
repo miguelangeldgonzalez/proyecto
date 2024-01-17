@@ -9,10 +9,13 @@ import { Municipality } from './entities/municipality.entity';
 // Services
 import { ZoneService } from './services/zone.service';
 
+import { ZoneController } from './controllers/zone.controller';
+
 
 @Module({
   imports: [TypeOrmModule.forFeature([State, Municipality, Borough])],
   providers: [ZoneService],
-  exports: [ZoneService]
+  exports: [ZoneService],
+  controllers: [ZoneController]
 })
 export class LocationModule {}
