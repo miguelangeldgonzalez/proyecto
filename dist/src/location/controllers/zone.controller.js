@@ -23,6 +23,8 @@ let ZoneController = class ZoneController {
     }
     getStates(ids) {
         let stateIds;
+        if (!ids)
+            return this.zoneService.getStates();
         try {
             stateIds = JSON.parse(ids);
         }
