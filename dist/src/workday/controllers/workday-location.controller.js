@@ -29,12 +29,13 @@ let WorkdayLocationController = class WorkdayLocationController {
     async create(body) {
         return await this.workdayLocationService.create(body);
     }
-    async getWorkdayLocations({ user }) {
+    async getWorkdayLocations({ user }, { boroughId }) {
+        boroughId = parseInt(boroughId);
         let stateIds = user.role.name === role_entity_1.RoleNames.ADMIN ?
             null :
             user.states.map(state => state.id);
         const role = user.role.name;
-        return await this.workdayLocationService.getWorkdayLocations(role, stateIds);
+        return await this.workdayLocationService.getWorkdayLocations(role, stateIds, boroughId);
     }
 };
 __decorate([
@@ -52,8 +53,9 @@ __decorate([
     (0, common_1.Get)(),
     openapi.ApiResponse({ status: 200, type: [require("../entities/workday_location.entity").WorkdayLocation] }),
     __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Query)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], WorkdayLocationController.prototype, "getWorkdayLocations", null);
 WorkdayLocationController = __decorate([

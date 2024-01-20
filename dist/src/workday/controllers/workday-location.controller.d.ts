@@ -8,5 +8,7 @@ export declare class WorkdayLocationController {
     create(body: CreateWorkdayLocationDTO): Promise<WorkdayLocation>;
     getWorkdayLocations({ user }: {
         user: JwtUser;
+    }, { boroughId }: {
+        boroughId: number;
     }): Promise<WorkdayLocation[]>;
 }

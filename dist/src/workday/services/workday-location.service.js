@@ -50,25 +50,36 @@ let WorkdayLocationService = class WorkdayLocationService {
             throw new common_1.NotFoundException('No se encontró la locacion con la jornada especificada');
         return location;
     }
-    async getWorkdayLocations(roleName, stateIds) {
+    async getWorkdayLocations(roleName, stateIds, boroughId) {
         const relations = ['borough', 'borough.municipality', 'borough.municipality.state'];
+        const where = {};
+        if (role_entity_1.RoleNames.ADMIN === roleName && boroughId) {
+            where.borough = {
+                id: boroughId
+            };
+        }
+        else if (role_entity_1.RoleNames.STATE_MANAGER === roleName) {
+            where.borough = {
+                municipality: {
+                    state: {
+                        id: (0, typeorm_1.In)(stateIds)
+                    }
+                }
+            };
+            if (boroughId) {
+                where.borough.id = boroughId;
+            }
+        }
         switch (roleName) {
             case role_entity_1.RoleNames.ADMIN:
                 return await this.workdayLocationRepo.find({
-                    relations
+                    relations,
+                    where
                 });
             case role_entity_1.RoleNames.STATE_MANAGER:
                 return await this.workdayLocationRepo.find({
                     relations,
-                    where: {
-                        borough: {
-                            municipality: {
-                                state: {
-                                    id: (0, typeorm_1.In)(stateIds)
-                                }
-                            }
-                        }
-                    }
+                    where
                 });
         }
     }

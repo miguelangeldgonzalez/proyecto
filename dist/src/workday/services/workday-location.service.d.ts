@@ -10,5 +10,5 @@ export declare class WorkdayLocationService {
     create(data: CreateWorkdayLocationDTO): Promise<WorkdayLocation>;
     getById(id: number): Promise<WorkdayLocation>;
     getByWorkdayId(workdayId: number): Promise<WorkdayLocation>;
-    getWorkdayLocations(roleName: RoleNames, stateIds?: number[]): Promise<WorkdayLocation[]>;
+    getWorkdayLocations(roleName: RoleNames, stateIds?: number[], boroughId?: number): Promise<WorkdayLocation[]>;
 }
