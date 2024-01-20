@@ -1,4 +1,4 @@
-import { In, Repository } from 'typeorm';
+import { FindManyOptions, FindOptionsWhere, FindOptionsWhereProperty, In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
@@ -70,30 +70,43 @@ export class WorkdayLocationService {
 
     /**
      * Return all workday locations if the user is an admin otherwise return the locations 
-     * of the states the state managers is in charge of
+     * of the states the state managers is in charge of. If boroughId is specified return 
+     * the locations of the borough
      * @param user 
      * @returns 
      */
-    async getWorkdayLocations(roleName: RoleNames, stateIds?: number[]): Promise<WorkdayLocation[]> {
+    async getWorkdayLocations(roleName: RoleNames, stateIds?: number[], boroughId?: number): Promise<WorkdayLocation[]> {
         const relations = ['borough', 'borough.municipality', 'borough.municipality.state'];
+        const where: FindOptionsWhere<WorkdayLocation> = {};
+
+        if (RoleNames.ADMIN === roleName && boroughId) {
+            where.borough = {
+                id: boroughId
+            }
+        } else if (RoleNames.STATE_MANAGER === roleName) {
+            where.borough = {
+                municipality: {
+                    state: {
+                        id: In(stateIds)
+                    }
+                }
+            }
+
+            if (boroughId) {
+                where.borough.id = boroughId;
+            }
+        }
 
         switch (roleName) {
             case RoleNames.ADMIN:
                 return await this.workdayLocationRepo.find({
-                    relations
+                    relations,
+                    where
                 })
             case RoleNames.STATE_MANAGER:
                 return await this.workdayLocationRepo.find({
                     relations,
-                    where: {
-                        borough: {
-                            municipality: {
-                                state: {
-                                    id: In(stateIds)
-                                }
-                            }
-                        }
-                    }
+                    where
                 })  
         }
     }

@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
 
 // Auth
 import { ZoneGuard } from 'src/auth/guards/zone.guard';
@@ -27,14 +27,16 @@ export class WorkdayLocationController {
 
     @Roles(RoleNames.ADMIN, RoleNames.STATE_MANAGER)
     @Get()
-    async getWorkdayLocations(@Req() { user } : { user: JwtUser } ): Promise<WorkdayLocation[]> {
+    async getWorkdayLocations(@Req() { user } : { user: JwtUser }, @Query() { boroughId }: { boroughId: number } ): Promise<WorkdayLocation[]> {
+        boroughId = parseInt(boroughId as any);
+        
         let stateIds = user.role.name === RoleNames.ADMIN ? 
                 null : 
                 user.states.map(state => state.id);
 
         const role = user.role.name as RoleNames;
 
-        return await this.workdayLocationService.getWorkdayLocations(role, stateIds);
+        return await this.workdayLocationService.getWorkdayLocations(role, stateIds, boroughId);
     }
 
 }
