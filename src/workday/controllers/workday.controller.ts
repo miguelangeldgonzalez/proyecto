@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Req, UseGuards } from '@nestjs/common';
 
 // Auth
 import { RoleGuard } from 'src/auth/guards/role.guard';
@@ -33,5 +33,12 @@ export class WorkdayController {
         const role = user.role.name as RoleNames;
 
         return await this.workdayService.getWorkdays(role, stateIds);
+    }
+
+    @Roles(RoleNames.ADMIN, RoleNames.STATE_MANAGER)
+    @UseGuards(ZoneGuard)
+    @Delete('/:workdayId')
+    async delete(@Param('workdayId') workdayId: number) {
+        return await this.workdayService.delete(workdayId);
     }
 }

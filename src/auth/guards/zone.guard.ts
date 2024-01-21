@@ -9,6 +9,7 @@ import { RoleNames } from '../entities/role.entity';
 
 // Services
 import { ZoneService } from 'src/location/services/zone.service';
+import { WorkdayService } from 'src/workday/services/workday.service';
 import { WorkdayLocationService } from 'src/workday/services/workday-location.service';
 
 import { Borough } from 'src/location/entities/borough.entity';
@@ -16,6 +17,7 @@ import { Borough } from 'src/location/entities/borough.entity';
 @Injectable()
 export class ZoneGuard implements CanActivate {
   constructor (
+    private workday: WorkdayService,
     private zoneService: ZoneService,
     private workdayLocationService: WorkdayLocationService
   ) { }
@@ -26,11 +28,14 @@ export class ZoneGuard implements CanActivate {
     const { user, body: data }: { user: JwtUser, body } 
       = context.switchToHttp().getRequest();
 
+    const workdayIdByParam = context.switchToHttp().getRequest().params.workdayId;
+    const workdayLocationIdByParam = context.switchToHttp().getRequest().params.workdayLocationId;
+
     let boroughId: number;
 
     // Este if valida de donde viene la informacion
-    if (data?.workdayLocationId) { // Create Workday
-      const location = await this.workdayLocationService.getById(data.workdayLocationId);
+    if (data?.workdayLocationId || workdayLocationIdByParam) { // Create Workday, Delete WorkdayLocation
+      const location = await this.workdayLocationService.getById(data.workdayLocationId ?? workdayLocationIdByParam);
       boroughId = location.borough.id;
 
     } else if (data?.workdayId) { // Create Volunteer
@@ -39,6 +44,10 @@ export class ZoneGuard implements CanActivate {
 
     } else if (data?.boroughId) { // Create WorkdayLocation
       boroughId = data.boroughId;
+
+    } else if (workdayIdByParam) { // Delete Workday
+      const workday = await this.workday.getWorkdayById(workdayIdByParam);
+      boroughId = workday.workdayLocation.borough.id;
     }
 
     if (boroughId) {

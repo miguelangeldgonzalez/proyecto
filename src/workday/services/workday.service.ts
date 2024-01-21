@@ -70,7 +70,8 @@ export class WorkdayService {
      */
     async getWorkdayById(id: number): Promise<Workday> {
         const workday = await this.workdayRepo.findOne({
-            where: { id }
+            where: { id },
+            relations: ['workdayLocation', 'workdayLocation.borough']
         })
 
         if (!workday) throw new NotFoundException(`No se encontró la jornada con el id ${id}`);
@@ -133,5 +134,20 @@ export class WorkdayService {
                     order
                 });
         }
+    }
+
+    /**
+     * Elimina una jornada
+     * @param id 
+     * @returns 
+     */
+    async delete(id: number) {
+        const workday = await this.workdayRepo.findOne({
+            where: { id }
+        });
+
+        if (!workday) throw new NotFoundException(`No se encontró la jornada con el id ${id}`);
+
+        return await this.workdayRepo.remove(workday);
     }
 }
