@@ -60,7 +60,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Workday.prototype, "totalExternalAssitance", void 0);
 __decorate([
-    (0, typeorm_1.ManyToOne)(() => workday_location_entity_1.WorkdayLocation),
+    (0, typeorm_1.ManyToOne)(() => workday_location_entity_1.WorkdayLocation, { nullable: false }),
     (0, typeorm_1.JoinColumn)({
         name: 'workday_location_id',
     }),

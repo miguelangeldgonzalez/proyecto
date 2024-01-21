@@ -36,6 +36,9 @@ let WorkdayController = class WorkdayController {
         const role = user.role.name;
         return await this.workdayService.getWorkdays(role, stateIds);
     }
+    async delete(workdayId) {
+        return await this.workdayService.delete(workdayId);
+    }
 };
 __decorate([
     (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
@@ -55,6 +58,16 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], WorkdayController.prototype, "getWorkdays", null);
+__decorate([
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
+    (0, common_1.UseGuards)(zone_guard_1.ZoneGuard),
+    (0, common_1.Delete)('/:workdayId'),
+    openapi.ApiResponse({ status: 200, type: require("../entities/workday.entity").Workday }),
+    __param(0, (0, common_1.Param)('workdayId')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], WorkdayController.prototype, "delete", null);
 WorkdayController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('workday'),

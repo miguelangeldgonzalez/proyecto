@@ -15,4 +15,5 @@ export declare class WorkdayService {
     getWorkdayById(id: number): Promise<Workday>;
     checkActiveWorkday(id: number): Promise<boolean>;
     getWorkdays(role: RoleNames, stateIds?: number[]): Promise<Workday[]>;
+    delete(id: number): Promise<Workday>;
 }

@@ -13,17 +13,22 @@ exports.ZoneGuard = void 0;
 const common_1 = require("@nestjs/common");
 const role_entity_1 = require("../entities/role.entity");
 const zone_service_1 = require("../../location/services/zone.service");
+const workday_service_1 = require("../../workday/services/workday.service");
 const workday_location_service_1 = require("../../workday/services/workday-location.service");
 let ZoneGuard = class ZoneGuard {
-    constructor(zoneService, workdayLocationService) {
+    constructor(workday, zoneService, workdayLocationService) {
+        this.workday = workday;
         this.zoneService = zoneService;
         this.workdayLocationService = workdayLocationService;
     }
     async canActivate(context) {
+        var _a;
         const { user, body: data } = context.switchToHttp().getRequest();
+        const workdayIdByParam = context.switchToHttp().getRequest().params.workdayId;
+        const workdayLocationIdByParam = context.switchToHttp().getRequest().params.workdayLocationId;
         let boroughId;
-        if (data === null || data === void 0 ? void 0 : data.workdayLocationId) {
-            const location = await this.workdayLocationService.getById(data.workdayLocationId);
+        if ((data === null || data === void 0 ? void 0 : data.workdayLocationId) || workdayLocationIdByParam) {
+            const location = await this.workdayLocationService.getById((_a = data.workdayLocationId) !== null && _a !== void 0 ? _a : workdayLocationIdByParam);
             boroughId = location.borough.id;
         }
         else if (data === null || data === void 0 ? void 0 : data.workdayId) {
@@ -32,6 +37,10 @@ let ZoneGuard = class ZoneGuard {
         }
         else if (data === null || data === void 0 ? void 0 : data.boroughId) {
             boroughId = data.boroughId;
+        }
+        else if (workdayIdByParam) {
+            const workday = await this.workday.getWorkdayById(workdayIdByParam);
+            boroughId = workday.workdayLocation.borough.id;
         }
         if (boroughId) {
             return await this.validateBorough(boroughId, user);
@@ -61,7 +70,8 @@ let ZoneGuard = class ZoneGuard {
 };
 ZoneGuard = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [zone_service_1.ZoneService,
+    __metadata("design:paramtypes", [workday_service_1.WorkdayService,
+        zone_service_1.ZoneService,
         workday_location_service_1.WorkdayLocationService])
 ], ZoneGuard);
 exports.ZoneGuard = ZoneGuard;

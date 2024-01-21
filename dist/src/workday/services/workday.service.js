@@ -60,7 +60,8 @@ let WorkdayService = class WorkdayService {
     }
     async getWorkdayById(id) {
         const workday = await this.workdayRepo.findOne({
-            where: { id }
+            where: { id },
+            relations: ['workdayLocation', 'workdayLocation.borough']
         });
         if (!workday)
             throw new common_1.NotFoundException(`No se encontró la jornada con el id ${id}`);
@@ -110,6 +111,14 @@ let WorkdayService = class WorkdayService {
                     order
                 });
         }
+    }
+    async delete(id) {
+        const workday = await this.workdayRepo.findOne({
+            where: { id }
+        });
+        if (!workday)
+            throw new common_1.NotFoundException(`No se encontró la jornada con el id ${id}`);
+        return await this.workdayRepo.remove(workday);
     }
 };
 WorkdayService = __decorate([

@@ -8,4 +8,5 @@ export declare class WorkdayController {
     getWorkdays({ user }: {
         user: JwtUser;
     }): Promise<import("../entities/workday.entity").Workday[]>;
+    delete(workdayId: number): Promise<import("../entities/workday.entity").Workday>;
 }
