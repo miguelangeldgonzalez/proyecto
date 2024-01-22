@@ -17,16 +17,29 @@ const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const role_guard_1 = require("../../auth/guards/role.guard");
 const jwt_auth_guard_1 = require("../../auth/guards/jwt-auth.guard");
-const user_service_1 = require("../services/user.service");
 const role_entity_1 = require("../../auth/entities/role.entity");
+const user_service_1 = require("../services/user.service");
 const role_decorator_1 = require("../../auth/decorators/role.decorator");
 const user_dto_1 = require("../dtos/user.dto");
 let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
-    async create(body) {
-        return await this.userService.create(body);
+    async create(body, { user }) {
+        if (user.role.name === role_entity_1.RoleNames.STATE_MANAGER) {
+            const stateIds = user.states.map(state => state.id);
+            let containAll = true;
+            body.states.forEach(stateId => {
+                if (!stateIds.includes(stateId)) {
+                    containAll = false;
+                }
+            });
+            if (!containAll)
+                throw new common_1.ForbiddenException({
+                    message: 'You can only create users for your states'
+                });
+        }
+        return await this.userService.create(body, user.role.name);
     }
     async delete(id) {
         return await this.userService.delete(id);
@@ -34,14 +47,21 @@ let UserController = class UserController {
     async setPassword(body, { user }) {
         return await this.userService.setPassword(body, user.userId);
     }
+    async getAll({ user }) {
+        return await this.userService.getAll(user);
+    }
+    async getById(id, { user }) {
+        return await this.userService.getById(id, user);
+    }
 };
 __decorate([
-    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN),
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
     (0, common_1.Post)(),
     openapi.ApiResponse({ status: 201, type: require("../entities/user.entity").User }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [user_dto_1.CreateUserDtoRequest]),
+    __metadata("design:paramtypes", [user_dto_1.CreateUserDtoRequest, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "create", null);
 __decorate([
@@ -62,6 +82,25 @@ __decorate([
     __metadata("design:paramtypes", [user_dto_1.SetUserPasswordDto, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "setPassword", null);
+__decorate([
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
+    (0, common_1.Get)(),
+    openapi.ApiResponse({ status: 200, type: [require("../entities/user.entity").User] }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAll", null);
+__decorate([
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
+    (0, common_1.Get)('/:id'),
+    openapi.ApiResponse({ status: 200, type: require("../entities/user.entity").User }),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getById", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('user'),

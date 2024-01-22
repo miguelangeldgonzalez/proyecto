@@ -22,6 +22,7 @@ const auth_service_1 = require("../../auth/services/auth.service");
 const zone_service_1 = require("../../location/services/zone.service");
 const mailer_service_1 = require("../../mailer/services/mailer.service");
 const user_entity_1 = require("../entities/user.entity");
+const role_entity_1 = require("../../auth/entities/role.entity");
 let UserService = class UserService {
     constructor(userRepo, mailerService, zoneService, roleService, authService) {
         this.userRepo = userRepo;
@@ -29,10 +30,18 @@ let UserService = class UserService {
         this.zoneService = zoneService;
         this.roleService = roleService;
         this.authService = authService;
+        this.options = {
+            select: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
+            relations: ['role', 'states'],
+        };
     }
-    async create(data) {
+    async create(data, LoggedRole) {
         const states = await this.zoneService.getStatesById(data.states);
         const role = await this.roleService.getRoleById(data.roleId);
+        if (LoggedRole !== role_entity_1.RoleNames.ADMIN && role.name === role_entity_1.RoleNames.ADMIN)
+            throw new common_1.ForbiddenException({
+                message: 'You can only create users with role state manager and volunteer'
+            });
         const user = Object.assign(Object.assign({}, data), { states,
             role });
         const newUser = this.userRepo.create(user);
@@ -80,6 +89,46 @@ let UserService = class UserService {
         return {
             message: 'User deleted successfully'
         };
+    }
+    async getAll(user) {
+        switch (user.role.name) {
+            case role_entity_1.RoleNames.ADMIN:
+                return await this.userRepo.find(Object.assign(Object.assign({}, this.options), { where: {
+                        id: (0, typeorm_2.Not)(user.id)
+                    } }));
+            case role_entity_1.RoleNames.STATE_MANAGER:
+                return await this.userRepo.find(Object.assign(Object.assign({}, this.options), { where: {
+                        id: (0, typeorm_2.Not)(user.id),
+                        states: {
+                            id: (0, typeorm_2.In)(user.states.map(state => state.id))
+                        }
+                    } }));
+        }
+    }
+    async getById(id, user) {
+        const userQueried = await this.userRepo.findOne(Object.assign(Object.assign({}, this.options), { where: { id } }));
+        if (!userQueried)
+            throw new common_1.NotFoundException({
+                message: 'User not found'
+            });
+        if (id == user.id)
+            return userQueried;
+        switch (user.role.name) {
+            case role_entity_1.RoleNames.ADMIN:
+                return userQueried;
+            case role_entity_1.RoleNames.STATE_MANAGER:
+                const contains = user.states.some(element => {
+                    return userQueried.states.includes(element);
+                });
+                if (contains) {
+                    return userQueried;
+                }
+                else {
+                    throw new common_1.NotFoundException({
+                        message: 'User not found'
+                    });
+                }
+        }
     }
 };
 UserService = __decorate([
