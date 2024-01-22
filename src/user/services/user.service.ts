@@ -1,7 +1,7 @@
 import { hash } from 'bcrypt'; 
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository, QueryFailedError } from 'typeorm';
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { IsNull, Repository, QueryFailedError, In, FindManyOptions, FindOptionsSelect, Not } from 'typeorm';
+import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 // Services
 import { RoleService } from './role.service';
@@ -11,9 +11,15 @@ import { MailerService } from 'src/mailer/services/mailer.service';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, CreateUserDtoRequest, SetUserPasswordDto } from '../dtos/user.dto';
+import { Role, RoleNames } from 'src/auth/entities/role.entity';
+import { JwtUser } from 'src/auth/guards/jwt-auth.guard';
 
 @Injectable()
 export class UserService {
+    private options: FindManyOptions<User> = {
+        select: ['id', 'name', 'email', 'createdAt', 'updatedAt'],
+        relations: ['role', 'states'],
+    }
 
     constructor(
         @InjectRepository(User) private userRepo: Repository<User>,
@@ -23,9 +29,14 @@ export class UserService {
         private authService: AuthService,
     ) {}
 
-    async create(data: CreateUserDtoRequest) {
+    async create(data: CreateUserDtoRequest, LoggedRole: RoleNames) {
         const states = await this.zoneService.getStatesById(data.states);
         const role = await this.roleService.getRoleById(data.roleId);
+
+        if (LoggedRole !== RoleNames.ADMIN && role.name === RoleNames.ADMIN)  throw new ForbiddenException({
+            message: 'You can only create users with role state manager and volunteer'
+        });
+
 
         const user: CreateUserDto = {
             ...data,
@@ -84,4 +95,58 @@ export class UserService {
             message: 'User deleted successfully'
         }
     }
+
+    async getAll(user: JwtUser): Promise<User[]> {
+        switch (user.role.name) {
+            case RoleNames.ADMIN:
+                return await this.userRepo.find({
+                    ...this.options,
+                    where: {
+                        id: Not(user.id)
+                    }
+                });
+            case RoleNames.STATE_MANAGER:
+                return await this.userRepo.find({
+                    ...this.options,
+                    where: {
+                        id: Not(user.id),
+                        states: {
+                            id: In(user.states.map(state => state.id))
+                        }
+                    }
+                })
+        }
+    }
+
+    async getById(id: number, user: JwtUser): Promise<User> {
+        const userQueried = await this.userRepo.findOne({
+            ...this.options,
+            where: { id }
+        })
+
+        if (!userQueried) throw new NotFoundException({
+            message: 'User not found'
+        })
+
+        if (id == user.id) return userQueried;
+        
+
+        switch (user.role.name) {
+            case RoleNames.ADMIN:
+                return userQueried;
+            case RoleNames.STATE_MANAGER:
+                const contains = user.states.some(element => {
+                    return userQueried.states.includes(element);
+                });
+
+                if (contains) {
+                    return userQueried;
+                } else {
+                    throw new NotFoundException({
+                        message: 'User not found'
+                    })
+                }
+        }
+    }
+
 }
