@@ -1,4 +1,4 @@
-import { FindOptionsOrder, FindOptionsWhere, In, LessThan, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, In, MoreThanOrEqual, Repository } from 'typeorm';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -88,7 +88,7 @@ export class WorkdayService {
         const workday = await this.workdayRepo.findOne({
             where: { 
                 id,
-                endTime: LessThan(new Date(Date.now())) 
+                endTime: MoreThanOrEqual(new Date(Date.now())) 
             }
         });
 
@@ -127,7 +127,7 @@ export class WorkdayService {
             case RoleNames.VOLUNTEER:
                 return await this.workdayRepo.find({
                     where: {
-                        endTime: LessThan(new Date(Date.now())),
+                        endTime: MoreThanOrEqual(new Date(Date.now())),
                         ...where
                     },
                     relations: ['workdayLocation', 'workdayLocation.borough'],
