@@ -38,9 +38,7 @@ let VolunteerService = class VolunteerService {
     }
     async createVolunteer(data) {
         const borough = await this.zoneService.findBoroughById(data.boroughId);
-        delete data.boroughId;
         const workday = await this.workdayService.getWorkdayById(data.workdayId);
-        delete data.workdayId;
         const volunteer = this.volunteerRepository.create(Object.assign({ borough, workdays: [workday] }, data));
         try {
             return await this.volunteerRepository.save(volunteer);
@@ -48,10 +46,34 @@ let VolunteerService = class VolunteerService {
         catch (error) {
             if (error instanceof typeorm_1.QueryFailedError) {
                 if (error.driverError.detail.includes('identification')) {
-                    throw new common_1.BadRequestException('Ya existe un voluntario con esta identificación');
+                    return await this.addWorkdayToExistVolunteer(data);
                 }
             }
             throw new common_1.InternalServerErrorException('Error al crear el voluntario');
+        }
+    }
+    async addWorkdayToExistVolunteer(data) {
+        const volunteer = await this.volunteerRepository.findOne({
+            where: {
+                identification: data.identification
+            },
+            relations: ['workdays', 'workdays.workdayLocation', 'borough']
+        });
+        if (!volunteer) {
+            throw new common_1.NotFoundException('No se encontró el voluntario con esta identificación');
+        }
+        const workday = await this.workdayService.getWorkdayById(data.workdayId);
+        if (!volunteer.workdays.some(w => w.id === workday.id)) {
+            volunteer.workdays.push(workday);
+        }
+        if (volunteer.borough.id !== data.boroughId) {
+            volunteer.borough = await this.zoneService.findBoroughById(data.boroughId);
+        }
+        try {
+            return await this.volunteerRepository.save(Object.assign(Object.assign({}, volunteer), data));
+        }
+        catch (error) {
+            throw new common_1.InternalServerErrorException('Error al agregar el día de trabajo al voluntario');
         }
     }
 };

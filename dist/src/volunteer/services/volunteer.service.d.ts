@@ -10,4 +10,5 @@ export declare class VolunteerService {
     constructor(zoneService: ZoneService, workdayService: WorkdayService, volunteerRepository: Repository<Volunteer>);
     getVolunteer(query: GetVolunteerDTO): Promise<Volunteer>;
     createVolunteer(data: CreateVolunteerDTO): Promise<Volunteer>;
+    private addWorkdayToExistVolunteer;
 }

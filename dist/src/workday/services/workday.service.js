@@ -71,7 +71,7 @@ let WorkdayService = class WorkdayService {
         const workday = await this.workdayRepo.findOne({
             where: {
                 id,
-                endTime: (0, typeorm_1.LessThan)(new Date(Date.now()))
+                endTime: (0, typeorm_1.MoreThanOrEqual)(new Date(Date.now()))
             }
         });
         if (!workday)
@@ -106,7 +106,7 @@ let WorkdayService = class WorkdayService {
                 });
             case role_entity_1.RoleNames.VOLUNTEER:
                 return await this.workdayRepo.find({
-                    where: Object.assign({ endTime: (0, typeorm_1.LessThan)(new Date(Date.now())) }, where),
+                    where: Object.assign({ endTime: (0, typeorm_1.MoreThanOrEqual)(new Date(Date.now())) }, where),
                     relations: ['workdayLocation', 'workdayLocation.borough'],
                     order
                 });
