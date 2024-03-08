@@ -24,7 +24,8 @@ export class VolunteerService {
      */
     async getVolunteer(query: GetVolunteerDTO): Promise<Volunteer> {
         const volunteer = await this.volunteerRepository.findOne({
-            where: query
+            where: query,
+            relations: ['borough']
         });
 
         if (!volunteer) {
