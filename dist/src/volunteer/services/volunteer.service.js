@@ -27,7 +27,8 @@ let VolunteerService = class VolunteerService {
     }
     async getVolunteer(query) {
         const volunteer = await this.volunteerRepository.findOne({
-            where: query
+            where: query,
+            relations: ['borough']
         });
         if (!volunteer) {
             throw new common_1.NotFoundException(`No se encontró el voluntario con estos parametros ${JSON.stringify(query)}`);
