@@ -1,6 +1,6 @@
 import { JwtUser } from 'src/auth/guards/jwt-auth.guard';
 import { WorkdayLocation } from '../entities/workday_location.entity';
-import { CreateWorkdayLocationDTO } from '../dtos/workday-location.dto';
+import { CreateWorkdayLocationDTO, UpdateWorkdayLocationDTO } from '../dtos/workday-location.dto';
 import { WorkdayLocationService } from '../services/workday-location.service';
 export declare class WorkdayLocationController {
     private workdayLocationService;
@@ -11,4 +11,7 @@ export declare class WorkdayLocationController {
     }, { boroughId }: {
         boroughId: number;
     }): Promise<WorkdayLocation[]>;
+    updateWorkdayLocation({ user }: {
+        user: JwtUser;
+    }, id: number, body: UpdateWorkdayLocationDTO): Promise<WorkdayLocation>;
 }

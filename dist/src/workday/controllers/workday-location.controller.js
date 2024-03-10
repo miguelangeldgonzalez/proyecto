@@ -37,6 +37,12 @@ let WorkdayLocationController = class WorkdayLocationController {
         const role = user.role.name;
         return await this.workdayLocationService.getWorkdayLocations(role, stateIds, boroughId);
     }
+    async updateWorkdayLocation({ user }, id, body) {
+        const stateIds = user.role.name === role_entity_1.RoleNames.ADMIN ?
+            null :
+            user.states.map(state => state.id);
+        return await this.workdayLocationService.updateWorkdayLocation(id, body, stateIds);
+    }
 };
 __decorate([
     (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
@@ -58,6 +64,17 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], WorkdayLocationController.prototype, "getWorkdayLocations", null);
+__decorate([
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
+    (0, common_1.Patch)('/:id'),
+    openapi.ApiResponse({ status: 200, type: require("../entities/workday_location.entity").WorkdayLocation }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Number, workday_location_dto_1.UpdateWorkdayLocationDTO]),
+    __metadata("design:returntype", Promise)
+], WorkdayLocationController.prototype, "updateWorkdayLocation", null);
 WorkdayLocationController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('workday-location'),

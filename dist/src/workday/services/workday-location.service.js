@@ -83,6 +83,27 @@ let WorkdayLocationService = class WorkdayLocationService {
                 });
         }
     }
+    async updateWorkdayLocation(id, body, statesUserId) {
+        const location = await this.getById(id);
+        if (statesUserId) {
+            const borough = this.zoneService.validateBoroughInStates(location.borough.id, statesUserId);
+            if (!borough)
+                throw new common_1.UnauthorizedException('No tienes permisos para modificar esta locación');
+        }
+        const locationUpdated = Object.assign(Object.assign({}, location), body);
+        if (body.boroughId) {
+            if (statesUserId) {
+                locationUpdated.borough = await this.zoneService.validateBoroughInStates(body.boroughId, statesUserId);
+                if (!locationUpdated.borough)
+                    throw new common_1.ForbiddenException('No tienes permisos para añadir esta parroquia a la ubicación');
+            }
+            else {
+                locationUpdated.borough = await this.zoneService.findBoroughById(body.boroughId);
+            }
+            delete body.boroughId;
+        }
+        return await this.workdayLocationRepo.save(locationUpdated);
+    }
 };
 WorkdayLocationService = __decorate([
     (0, common_1.Injectable)(),

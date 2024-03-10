@@ -4,3 +4,7 @@ export declare class CreateWorkdayLocationDTO {
     locationUrl: string;
     boroughId: number;
 }
+export declare class UpdateWorkdayLocationDTO extends CreateWorkdayLocationDTO {
+    title: string;
+    boroughId: number;
+}
