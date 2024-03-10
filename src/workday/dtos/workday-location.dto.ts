@@ -18,3 +18,14 @@ export class CreateWorkdayLocationDTO {
     @IsPositive()
     boroughId: number;
 }
+
+export class UpdateWorkdayLocationDTO extends CreateWorkdayLocationDTO {
+    @IsString()
+    @IsOptional()
+    title: string;
+
+    @IsNumber()
+    @IsPositive()
+    @IsOptional()
+    boroughId: number;
+}

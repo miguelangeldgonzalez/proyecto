@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Query, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, Req, UseGuards } from '@nestjs/common';
 
 // Auth
 import { ZoneGuard } from 'src/auth/guards/zone.guard';
@@ -8,7 +8,7 @@ import { Roles } from 'src/auth/decorators/role.decorator';
 import { JwtAuthGuard, JwtUser } from 'src/auth/guards/jwt-auth.guard';
 
 import { WorkdayLocation } from '../entities/workday_location.entity';
-import { CreateWorkdayLocationDTO } from '../dtos/workday-location.dto';
+import { CreateWorkdayLocationDTO, UpdateWorkdayLocationDTO } from '../dtos/workday-location.dto';
 import { WorkdayLocationService } from '../services/workday-location.service';
 
 @UseGuards(JwtAuthGuard, RoleGuard)
@@ -37,6 +37,20 @@ export class WorkdayLocationController {
         const role = user.role.name as RoleNames;
 
         return await this.workdayLocationService.getWorkdayLocations(role, stateIds, boroughId);
+    }
+
+    @Roles(RoleNames.ADMIN, RoleNames.STATE_MANAGER)
+    @Patch('/:id') 
+    async updateWorkdayLocation(
+        @Req() { user } : { user: JwtUser }, 
+        @Param('id') id: number, 
+        @Body() body: UpdateWorkdayLocationDTO
+    ): Promise<WorkdayLocation> {
+        const stateIds: null | number[] = user.role.name === RoleNames.ADMIN ? 
+                null : 
+                user.states.map(state => state.id);
+
+        return await this.workdayLocationService.updateWorkdayLocation(id, body, stateIds);
     }
 
 }
