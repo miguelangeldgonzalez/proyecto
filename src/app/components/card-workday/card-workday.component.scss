@@ -1,0 +1,53 @@
+@import '../../../variables.scss';
+
+:host {
+  min-width: 250px;
+  height: 200px;
+}
+
+.card_container {
+  width: 98%;
+  height: 100%;
+  padding: 10px;
+  margin: 0 auto;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.card_title_shadow {
+  position: absolute;
+  background-color: $font-card-color;
+  width: 100%;
+  height: calc(1.17em + 20px);
+  top: 0;
+  right: 0;
+  z-index: -1;
+}
+
+.card_container h3 {
+  color: white;
+  text-transform: capitalize;
+  padding-bottom: 10px;
+  text-overflow: ellipsis;
+  width: 80%;
+}
+
+.card_content {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 140px;
+  padding: 10px 0;
+}
+
+.not_available {
+  color: gray;
+  font-style: italic;
+}
+
+.card_item_caption {
+  font-weight: bold;
+}

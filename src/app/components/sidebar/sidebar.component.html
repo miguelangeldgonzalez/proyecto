@@ -1,0 +1,22 @@
+<aside>
+  <div class="logo_container">
+    <div class="logo_shadow"></div>
+    <img src="assets/logo.jpeg" class="logo" alt="Logo Proyecto Sirena">
+  </div>
+  <ul>
+    <li><a routerLink="/jornadas"><icon-calendar class="icon"></icon-calendar><span>Jornadas</span></a></li>
+
+    @if (loggedUser) {
+      @if([roles.ADMIN, roles.STATE_MANAGER].includes(loggedUser.role.name)) {
+        <li><a routerLink="/ubicaciones"><icon-location class="icon"></icon-location><span>Ubicaciones</span></a></li>
+        <li><a routerLink="/usuarios"><icon-user class="icon"></icon-user><span>Usuarios</span></a></li>
+      }
+    }
+  </ul>
+
+  <div class="logout_container">
+    <button class="logout" (click)="handleLogout()">
+      <span>Cerrar Sesión</span>
+    </button>
+  </div>
+</aside>

@@ -1,0 +1,10 @@
+.container {
+  overflow: hidden;
+  margin-left: 250px;
+  padding-bottom: 10px;
+  width: calc(100% - 250px);
+}
+
+.container :nth-child(2) {
+  border: 1px solid red;
+}

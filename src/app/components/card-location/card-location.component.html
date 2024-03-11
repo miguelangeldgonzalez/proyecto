@@ -1,0 +1,31 @@
+<div class="card_container" (click)="returnLocation()">
+  <div class="card_title">
+    <div class="card_title_shadow"></div>
+    <h3>{{location.title}}</h3>
+  </div>
+
+  <div class="card_content">
+    @if(location.description) {
+      <p>{{location.description}}</p>
+    } @else {
+      <p class="not_available">No hay descripción</p>
+    }
+
+    <div class="card_item">
+      <p>
+        <span class="card_item_caption">URL de la Ubicación: </span> <br>
+        @if(location.locationUrl) {
+          <a href="{{location.locationUrl}}" target="_blank">Ver en Google Maps</a>
+        } @else {
+          <p class="not_available">No hay URL</p>
+        }
+      </p>
+    </div>
+    <div class="card_item">
+      <p>
+        <span class="card_item_caption">Parroquia: </span> <br>
+        <span>{{location.borough.name}}</span>
+      </p>
+    </div>
+  </div>
+</div>

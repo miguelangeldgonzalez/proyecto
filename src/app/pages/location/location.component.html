@@ -1,0 +1,40 @@
+<app-button value="+ Agregar Ubicación" (onClick)="addLocation()"></app-button>
+
+<div class="modal_container" [style.display]="showModal ? 'block' : 'none'">
+  <div class="modal">
+    <button class="close" (click)="showModal = !showModal; editable = false">x</button>
+    <h2><span>{{editable ? 'Editar' : 'Crear'}}</span> una Ubicación</h2>
+
+    <form [formGroup]="locationForm" (ngSubmit)="locationSubmitHandler()">
+      <div class="form_group">
+        <label for="">Título</label>
+        <input type="text" class="input" formControlName="title" placeholder="Título" [class.error_shake]="validLocation.title" required>
+      </div>
+      <div class="form_group">
+        <label for="">Link de Google Maps</label>
+        <input type="text" class="input" formControlName="locationUrl" placeholder="Link de Google Maps">
+      </div>
+      <div class="form_group">
+        <label for="">Descripción</label>
+        <input type="text" class="input" formControlName="description" placeholder="Descripción">
+      </div>
+
+      <app-zone-select #zoneSelect [valid]="validZone" (boroughId)="boroughId = $event"></app-zone-select>
+      <button>
+        @if(loadingCreateLocation) {
+          <app-loader></app-loader>
+        } @else {
+          Aceptar
+        }
+      </button>
+    </form>
+  </div>
+</div>
+
+
+<div class="cards_container">
+  @for (location of workdyaLocations; track workdyaLocations) {
+    <app-card-location (locationOutput)="edit($event)" [location]="location">
+    </app-card-location>
+  }
+</div>

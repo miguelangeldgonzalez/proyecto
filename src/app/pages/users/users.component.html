@@ -1,0 +1,122 @@
+<app-button value="+ Agregar Usuario" (onClick)="showModal = !showModal"></app-button>
+
+@if(showModal) {
+  <div class="modal_container">
+    <div class="modal">
+      <button class="close" (click)="showModal = !showModal">x</button>
+      <h2>Crear un Usuario</h2>
+      <form #user="ngForm" (ngSubmit)="userSubmitHandler(user)">
+        <div class="form_group">
+          <label for="">Email</label>
+          <input
+            type="email"
+            class="input"
+            name="email"
+            placeholder="Email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+            required ngModel
+          >
+        </div>
+
+        <div class="form_group">
+          <label for="">Nombre</label>
+          <input
+            type="text"
+            class="input"
+            name="name"
+            required ngModel
+          >
+        </div>
+
+        <div class="form_group">
+          <label for="">Seleccionar Rol</label>
+          <div class="select_container">
+            <select required name="roleId" class="input" ngModel>
+              <option value="1">Administrador</option>
+              <option value="3">Gerente de Estado</option>
+              <option value="2">Voluntario</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form_group">
+          <label for="">Seleccionar Estado</label>
+          <div class="states_select">
+
+            <div class="select_container" [class.loading]="loadingStates">
+              <div class="loader_container">
+                <app-loader></app-loader>
+              </div>
+
+              <select required name="stateId" (change)="handleChangeState($event)" class="input">
+                <option value="" selected disabled hidden>Seleccionar estado</option>
+                @for(s of states; track states) {
+                  <option value="{{s.id}}">{{s.name}}</option>
+                }
+              </select>
+
+            </div>
+            <button (click)="addState($event)">+</button>
+          </div>
+        </div>
+
+        <div class="form_group state_selected__container">
+          @for(s of statesSelected; track statesSelected) {
+            <div class="state_selected">
+              <span>{{s.name}}</span>
+              <button (click)="removeState($event, s.id)">-</button>
+            </div>
+          }
+        </div>
+
+        <button>
+          @if(loadingCreateUser) {
+            <app-loader></app-loader>
+          } @else {
+            Aceptar
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+}
+
+<div class="table">
+  <mat-table class="lessons-table mat-elevation-z8" [dataSource]="users">
+
+    <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef>Nombre</mat-header-cell>
+        <mat-cell *matCellDef="let user">{{user.name}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="email">
+        <mat-header-cell *matHeaderCellDef>Email</mat-header-cell>
+        <mat-cell class="email-cell"
+                  *matCellDef="let user">{{user.email}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="roleName">
+      <mat-header-cell *matHeaderCellDef>Rol</mat-header-cell>
+      <mat-cell class="description-cell"
+                *matCellDef="let user">{{user.roleName}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="stateNames">
+      <mat-header-cell *matHeaderCellDef>Estados</mat-header-cell>
+      <mat-cell class="description-cell"
+                *matCellDef="let user">{{user.stateNames}}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <mat-header-cell *matHeaderCellDef>Eliminar</mat-header-cell>
+      <mat-cell class="trash-cell" *matCellDef="let user">
+        <icon-trash (click)="onRowClicked(user)"></icon-trash>
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+    <mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+
+  </mat-table>
+</div>

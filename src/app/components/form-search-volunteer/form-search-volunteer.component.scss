@@ -1,0 +1,46 @@
+@import "../../../variables.scss";
+
+:host {
+  display: contents;
+}
+
+form {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.form_group{
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  gap: 20px;
+}
+
+/*Button*/
+button {
+  width: 85%;
+  height: 40px;
+  margin: 20px auto;
+  color: #fff;
+  background: $button-blue;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: .2s ease-in;
+}
+
+button:hover {
+  background-color: $button-blue-hover;
+}
+
+.button_container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
+  flex-direction: row;
+}

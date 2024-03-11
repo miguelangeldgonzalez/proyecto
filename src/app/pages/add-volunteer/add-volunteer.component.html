@@ -1,0 +1,45 @@
+<div class="container">
+  <h2>Añadir un voluntario</h2>
+
+  <div class="slider_container" #sliderContainer>
+    <div class="slide" [style.transform]="'translateX('+moveSlide+'px)'" [style.width]="(sliderContainer.offsetWidth * stepCount) + 'px'">
+      <div class="slider_step" [style.width]="sliderContainer.offsetWidth + 'px'" >
+        <app-form-search-volunteer (next)="handleSearchVolunteer($event)"></app-form-search-volunteer>
+      </div>
+
+      <div class="slider_step" [style.width]="sliderContainer.offsetWidth + 'px'">
+        <form [formGroup]="createForm" (ngSubmit)="addVolunteer()" >
+          <div class="form_group">
+            <label for="identification">Identificación</label>
+            <input type="number" class="input" formControlName="identification">
+          </div>
+          <div class="form_group">
+            <label for="name">Nombre</label>
+            <input type="text" class="input" formControlName="name" required>
+          </div>
+          <div class="form_group">
+            <label for="phone">Teléfono</label>
+            <input type="tel" class="input" formControlName="phone">
+          </div>
+          <div class="form_group">
+            <label for="birthdate">Fecha de nacimiento</label>
+            <input type="date" class="input" formControlName="birthDate">
+          </div>
+          <div class="form_group has_pet">
+            <label for="hasPet">¿Tiene mascota?</label>
+            <input type="checkbox" class="input" formControlName="hasPet">
+          </div>
+          <app-zone-select #zoneSelect [valid]="validZone" (boroughId)="boroughId = $event"></app-zone-select>
+
+          <button type="submit" class="button">
+            @if(loadingCreateVolunteer) {
+              <app-loader></app-loader>
+            } @else {
+              Añadir voluntario
+            }
+          </button>
+        </form>
+      </div>
+  </div>
+  </div>
+</div>

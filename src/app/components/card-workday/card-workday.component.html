@@ -1,0 +1,21 @@
+<div class="card_container" (click)="open()">
+  <div class="card_title">
+    <div class="card_title_shadow"></div>
+    <h3>{{workday.workdayLocation.borough.name}}</h3>
+  </div>
+
+  <div class="card_content">
+    <div class="card_item">
+      <p>
+        <span class="card_item_caption">Hora de inicio: </span> <br>
+        <span>{{workday.startTime}}</span>
+      </p>
+    </div>
+    <div class="card_item">
+      <p>
+        <span class="card_item_caption">Hora de fin: </span> <br>
+        <span>{{workday.endTime}}</span>
+      </p>
+    </div>
+  </div>
+</div>

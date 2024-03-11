@@ -1,0 +1,16 @@
+<form [formGroup]="identificationForm" (ngSubmit)="searchVolunteer()">
+  <div class="form_group">
+    <label for="name">Cedula</label>
+    <input type="number" class="input" formControlName="identification">
+  </div>
+
+  <div class="button_container">
+    <button type="submit" class="button">
+      @if (loading) {
+        <app-loader></app-loader>
+      } @else {
+        Siguiente
+      }
+    </button>
+  </div>
+</form>

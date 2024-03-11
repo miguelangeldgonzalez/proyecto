@@ -1,0 +1,36 @@
+<app-button value="+ Agregar Jornada" (onClick)="showModal = !showModal"></app-button>
+
+@if(showModal) {
+  <div class="modal_container">
+    <div class="modal">
+      <button class="close" (click)="showModal = !showModal">x</button>
+      <h2>Crear una Ubicación</h2>
+      <form #location="ngForm" (ngSubmit)="workdaySubmitHandler(location)">
+        <div class="form_group">
+          <label for="">Hora y fecha de inicio</label>
+          <input type="datetime-local" class="input" name="startTime" placeholder="Hora y fecha de inicio" ngModel>
+        </div>
+        <div class="form_group">
+          <label for="">Hora y fecha de fin</label>
+          <input type="datetime-local" class="input" name="endTime" placeholder="Hora y fecha de fin" ngModel>
+        </div>
+
+        <app-zone-select [valid]="validZone" (boroughId)="workdayLocationId = $event" [searchWorkdayLocation]="true"></app-zone-select>
+        <button>
+          @if(loadingCreateWorkday) {
+            <app-loader></app-loader>
+          } @else {
+            Aceptar
+          }
+        </button>
+      </form>
+    </div>
+  </div>
+}
+
+<div class="cards_container">
+  @for(workday of workdays; track workdays) {
+    <app-card-workday [workday]="workday"></app-card-workday>
+  }
+</div>
+

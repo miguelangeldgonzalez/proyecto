@@ -1,0 +1,81 @@
+
+<div class="form_group">
+  <label for="">Seleccionar Estado</label>
+  <div class="select_container" [class.loading]="loadingStates">
+    <div class="loader_container">
+      <app-loader></app-loader>
+    </div>
+
+    <select required name="stateId" [class.error_shake]="!valid.state" (change)="handleChangeState($event)" class="input">
+      <option value="" selected disabled hidden>Seleccionar estado</option>
+      @for(s of states; track states) {
+        <option value="{{s.id}}">{{s.name}}</option>
+      }
+    </select>
+  </div>
+</div>
+
+<div class="form_group">
+  <label for="">Seleccionar Municipio</label>
+  <div class="select_container" [class.loading]="loadingMunicipalities">
+    <div class="loader_container">
+      <app-loader></app-loader>
+    </div>
+
+    <select required name="municipalityId" [class.error_shake]="!valid.municipality" (change)="handleChangeMunicipality($event)" class="input" [disabled]="municipalities.length == 0">
+      <option value="" selected disabled hidden>Seleccionar Municipio</option>
+      @for(m of municipalities; track municipalities) {
+        <option value="{{m.id}}">{{m.name}}</option>
+      }
+    </select>
+  </div>
+</div>
+
+<div class="form_group">
+  <label for="">Seleccionar Parroquia</label>
+  <div class="select_container" [class.loading]="loadingBoroughs">
+    <div class="loader_container">
+      <app-loader></app-loader>
+    </div>
+
+    <select
+      required
+      class="input"
+      name="boroughId"
+      [disabled]="boroughs.length == 0"
+      [class.error_shake]="!valid.borough"
+      (change)="handleChangeBorough($event)"
+    >
+    <option value="" selected disabled hidden> Seleccionar Parroquia</option>
+      @for(b of boroughs; track boroughs) {
+        <option value="{{b.id}}">{{b.name}}</option>
+      }
+    </select>
+  </div>
+</div>
+
+
+@if (searchWorkdayLocation) {
+  <div class="form_group">
+    <label for="">Seleccionar Ubicación</label>
+    <div class="select_container" [class.loading]="loadingWorkdayLocations">
+      <div class="loader_container">
+        <app-loader></app-loader>
+      </div>
+
+      <select
+        required
+        class="input"
+        name="workdayLocationId"
+        [disabled]="workdayLocations.length == 0"
+        [class.error_shake]="!valid.workdayLocation"
+        (change)="handleChangeWorkdayLocation($event)"
+      >
+      <option value="" selected disabled hidden> Seleccionar Ubicacion</option>
+        @for(w of workdayLocations; track workdayLocations) {
+          <option value="{{w.id}}">{{w.title}}</option>
+        }
+      </select>
+    </div>
+  </div>
+}

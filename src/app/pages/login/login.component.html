@@ -1,0 +1,27 @@
+<div class="main">
+  <input type="checkbox" id="chk" aria-hidden="true">
+    <img src="assets/logo.jpeg" class="logo" alt="">
+    <div class="login">
+      <form class="form" #user="ngForm" (ngSubmit)="onLoginSubmit(user)">
+        <label for="chk" aria-hidden="true">Iniciar Sesion</label>
+        <input class="input" type="email" name="email" placeholder="Email" [class.error_shake]="error.email" required ngModel>
+        <input class="input" type="password" name="password" placeholder="Contraseña" [class.error_shake]="error.password" required ngModel>
+        <span class="invalid-password" [class.active]="invalidPassword">Contraseña y/o email invalido</span>
+        <button>
+          @if(loadingLogin) {
+            <app-loader></app-loader>
+          } @else {
+            Iniciar Sesion
+          }
+        </button>
+      </form>
+    </div>
+
+    <div class="recovery">
+      <form class="form">
+        <label for="chk" aria-hidden="true">Recuperar Contraseña</label>
+        <input class="input" type="email" name="email" placeholder="Email" required="">
+        <button>Recuperar</button>
+      </form>
+    </div>
+</div>
