@@ -130,6 +130,12 @@ let UserService = class UserService {
                 }
         }
     }
+    async getUserName(id) {
+        return await this.userRepo.findOne({
+            where: { id },
+            select: ['id', 'name']
+        });
+    }
 };
 UserService = __decorate([
     (0, common_1.Injectable)(),

@@ -5,6 +5,10 @@ import { CreateUserDtoRequest, SetUserPasswordDto } from '../dtos/user.dto';
 export declare class UserController {
     private userService;
     constructor(userService: UserService);
+    tokenStatus({ user }: JwtCreateUserReturn): Promise<{
+        id: number;
+        name: string;
+    }>;
     create(body: CreateUserDtoRequest, { user }: {
         user: JwtUser;
     }): Promise<User>;

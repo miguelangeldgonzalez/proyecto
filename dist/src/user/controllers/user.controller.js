@@ -25,6 +25,9 @@ let UserController = class UserController {
     constructor(userService) {
         this.userService = userService;
     }
+    async tokenStatus({ user }) {
+        return this.userService.getUserName(user.userId);
+    }
     async create(body, { user }) {
         if (user.role.name === role_entity_1.RoleNames.STATE_MANAGER) {
             const stateIds = user.states.map(state => state.id);
@@ -54,6 +57,14 @@ let UserController = class UserController {
         return await this.userService.getById(id, user);
     }
 };
+__decorate([
+    (0, common_1.Get)('token-status'),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "tokenStatus", null);
 __decorate([
     (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
     (0, common_1.Post)(),

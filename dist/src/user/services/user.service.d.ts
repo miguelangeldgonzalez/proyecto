@@ -24,4 +24,5 @@ export declare class UserService {
     }>;
     getAll(user: JwtUser): Promise<User[]>;
     getById(id: number, user: JwtUser): Promise<User>;
+    getUserName(id: number): Promise<User>;
 }
