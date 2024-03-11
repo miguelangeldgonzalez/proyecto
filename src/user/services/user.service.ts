@@ -11,7 +11,7 @@ import { MailerService } from 'src/mailer/services/mailer.service';
 
 import { User } from '../entities/user.entity';
 import { CreateUserDto, CreateUserDtoRequest, SetUserPasswordDto } from '../dtos/user.dto';
-import { Role, RoleNames } from 'src/auth/entities/role.entity';
+import { RoleNames } from 'src/auth/entities/role.entity';
 import { JwtUser } from 'src/auth/guards/jwt-auth.guard';
 
 @Injectable()
@@ -149,4 +149,15 @@ export class UserService {
         }
     }
 
+    /**
+     * Returns the name of the user that sent the token to set the password
+     * @param id 
+     * @returns \{ id: number, name: string \}
+     */
+    async getUserName(id: number) {
+        return await this.userRepo.findOne({
+            where: { id },
+            select: ['id', 'name']
+        })
+    }
 }

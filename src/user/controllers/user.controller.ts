@@ -6,7 +6,7 @@ import { JwtAuthGuard, JwtCreateUserReturn, JwtUser } from 'src/auth/guards/jwt-
 
 // Entities
 import { User } from '../entities/user.entity';
-import { Role, RoleNames } from 'src/auth/entities/role.entity';
+import { RoleNames } from 'src/auth/entities/role.entity';
 
 import { UserService } from '../services/user.service';
 import { Roles } from 'src/auth/decorators/role.decorator';
@@ -18,6 +18,11 @@ export class UserController {
     constructor (
         private userService: UserService
     ) {}
+    
+    @Get('token-status')
+    async tokenStatus(@Req() { user }: JwtCreateUserReturn): Promise<{ id: number, name: string}> {
+        return this.userService.getUserName(user.userId);
+    }
     
     @Roles(RoleNames.ADMIN, RoleNames.STATE_MANAGER)
     @Post()
