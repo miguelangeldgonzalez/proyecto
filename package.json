@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "deploy": "nest build && cp -r ./dist ../dist && git checkout deploy && mv ../dist ./dist && git add * && git commit -m 'deploy' && git push origin deploy",
+    "deploy": "nest build && cp -r ./dist ../dist && git checkout deploy && mv ../dist ./ && git add * && git commit -m 'deploy' && git push origin deploy",
     "prebuild": "npm i -g @nestjs/cli",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
