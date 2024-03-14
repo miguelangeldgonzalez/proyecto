@@ -28,6 +28,15 @@ let WorkdayService = class WorkdayService {
         this.mediaTypeRepo = mediaTypeRepo;
         this.externalAssistanceRepo = externalAssistanceRepo;
     }
+    async getById(workdayId) {
+        const w = await this.workdayRepo.findOne({
+            where: { id: workdayId },
+            relations: ['mediaTypes', 'externalAssistance', 'workdayLocation', 'workdayLocation.borough']
+        });
+        if (!w)
+            throw new common_1.NotFoundException(`No se encontró la jornada con el id ${workdayId}`);
+        return w;
+    }
     async create(data) {
         var _a;
         const manyEntities = [
@@ -119,6 +128,45 @@ let WorkdayService = class WorkdayService {
         if (!workday)
             throw new common_1.NotFoundException(`No se encontró la jornada con el id ${id}`);
         return await this.workdayRepo.remove(workday);
+    }
+    async getWorkdayMetadata() {
+        return {
+            mediaTypes: await this.mediaTypeRepo.find(),
+            externalAssistance: await this.externalAssistanceRepo.find()
+        };
+    }
+    async update(workdayId, body) {
+        var _a;
+        const workday = await this.workdayRepo.findOne({
+            where: { id: workdayId },
+            relations: ['mediaTypes', 'externalAssistance']
+        });
+        if (!workday)
+            throw new common_1.NotFoundException(`No se encontró la jornada con el id ${workdayId}`);
+        const manyEntities = [
+            {
+                name: 'externalAssistanceIds',
+                repo: this.externalAssistanceRepo,
+                newName: 'externalAssistance'
+            }, {
+                name: 'mediaTypeIds',
+                repo: this.mediaTypeRepo,
+                newName: 'mediaTypes'
+            }
+        ];
+        for (const e of manyEntities) {
+            if (((_a = body[e.name]) === null || _a === void 0 ? void 0 : _a.length) > 0) {
+                const entities = await e.repo.find({
+                    where: {
+                        id: (0, typeorm_1.In)(body[e.name])
+                    }
+                });
+                delete body[e.name];
+                if (entities.length > 0)
+                    workday[e.newName] = entities;
+            }
+        }
+        return await this.workdayRepo.save(Object.assign(Object.assign({}, workday), body));
     }
 };
 WorkdayService = __decorate([

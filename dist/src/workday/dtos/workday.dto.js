@@ -9,9 +9,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateWorkdayDTO = void 0;
+exports.UpdateWorkdayDTO = exports.CreateWorkdayDTO = void 0;
 const openapi = require("@nestjs/swagger");
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 const common_1 = require("../../common");
 class CreateWorkdayDTO {
     static _OPENAPI_METADATA_FACTORY() {
@@ -59,4 +60,10 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateWorkdayDTO.prototype, "mediaTypeIds", void 0);
 exports.CreateWorkdayDTO = CreateWorkdayDTO;
+class UpdateWorkdayDTO extends (0, swagger_1.PartialType)(CreateWorkdayDTO) {
+    static _OPENAPI_METADATA_FACTORY() {
+        return {};
+    }
+}
+exports.UpdateWorkdayDTO = UpdateWorkdayDTO;
 //# sourceMappingURL=workday.dto.js.map

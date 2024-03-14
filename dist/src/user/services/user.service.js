@@ -50,6 +50,23 @@ let UserService = class UserService {
         await this.mailerService.sendMailForCreateUser(createdUser.email, token.accessToken);
         return createdUser;
     }
+    async resendToken(userId) {
+        const user = await this.userRepo.findOne({
+            where: {
+                id: userId
+            }
+        });
+        if (!user) {
+            throw new common_1.NotFoundException({
+                message: 'User not found'
+            });
+        }
+        const token = this.authService.generateJwtForCreateUser(user.id);
+        await this.mailerService.sendMailForCreateUser(user.email, token.accessToken);
+        return {
+            message: 'Email sent successfully'
+        };
+    }
     async setPassword(data, userId) {
         const user = await this.userRepo.findOne({
             where: {

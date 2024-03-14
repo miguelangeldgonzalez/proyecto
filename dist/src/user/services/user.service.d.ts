@@ -16,6 +16,9 @@ export declare class UserService {
     private options;
     constructor(userRepo: Repository<User>, mailerService: MailerService, zoneService: ZoneService, roleService: RoleService, authService: AuthService);
     create(data: CreateUserDtoRequest, LoggedRole: RoleNames): Promise<User>;
+    resendToken(userId: number): Promise<{
+        message: string;
+    }>;
     setPassword(data: SetUserPasswordDto, userId: number): Promise<{
         message: string;
     }>;

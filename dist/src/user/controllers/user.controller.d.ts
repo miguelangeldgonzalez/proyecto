@@ -24,4 +24,7 @@ export declare class UserController {
     getById(id: number, { user }: {
         user: JwtUser;
     }): Promise<User>;
+    resendToken(id: number): Promise<{
+        message: string;
+    }>;
 }

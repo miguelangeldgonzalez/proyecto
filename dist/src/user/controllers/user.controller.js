@@ -56,6 +56,9 @@ let UserController = class UserController {
     async getById(id, { user }) {
         return await this.userService.getById(id, user);
     }
+    async resendToken(id) {
+        return await this.userService.resendToken(id);
+    }
 };
 __decorate([
     (0, common_1.Get)('token-status'),
@@ -112,6 +115,15 @@ __decorate([
     __metadata("design:paramtypes", [Number, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getById", null);
+__decorate([
+    (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN),
+    (0, common_1.Get)('/resend-token/:id'),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Number]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "resendToken", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('user'),

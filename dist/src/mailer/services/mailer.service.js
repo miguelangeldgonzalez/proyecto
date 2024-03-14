@@ -26,7 +26,7 @@ let MailerService = class MailerService {
             from: this.mailConfig.auth.user,
             to,
             subject: 'Has sido registrado en Proyecto Sirena',
-            text: `Bienvenido a Proyecto Sirena, verifica tu correo haciendo click en el siguiente enlace para verificar tu cuenta localhost:3000/${token}`,
+            html: `Bienvenido a Proyecto Sirena <a href="https://proyecto-sirena.netlify.app/set-password?token=${token}">Verifica tu correo</a>`,
         });
     }
 };
