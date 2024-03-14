@@ -16,6 +16,11 @@ export class WorkdayController {
     constructor (
         private workdayService: WorkdayService
     ) {}
+
+    @Get('/metadata') 
+    async getWorkdayMetadata() {
+        return await this.workdayService.getWorkdayMetadata();
+    }
     
     @Get('/:workdayId')
     async getById(@Param('workdayId') workdayId: number) {
@@ -25,11 +30,6 @@ export class WorkdayController {
     @Patch('/:workdayId')
     async update(@Param('workdayId') workdayId: number, @Body() body: UpdateWorkdayDTO) {
         return await this.workdayService.update(workdayId, body);
-    }
-
-    @Get('/metadata') 
-    async getWorkdayMetadata() {
-        return await this.workdayService.getWorkdayMetadata();
     }
     
     @Roles(RoleNames.ADMIN, RoleNames.STATE_MANAGER)
