@@ -4,6 +4,10 @@ import { WorkdayService } from '../services/workday.service';
 export declare class WorkdayController {
     private workdayService;
     constructor(workdayService: WorkdayService);
+    getWorkdayMetadata(): Promise<{
+        mediaTypes: import("../entities/media_type.entity").MediaType[];
+        externalAssistance: import("../entities/external_assistance.entity").ExternalAssistance[];
+    }>;
     getById(workdayId: number): Promise<import("../entities/workday.entity").Workday>;
     update(workdayId: number, body: UpdateWorkdayDTO): Promise<{
         startTime: Date;
@@ -24,10 +28,6 @@ export declare class WorkdayController {
         updatedAt: Date;
         deletedAt?: Date;
     } & import("../entities/workday.entity").Workday>;
-    getWorkdayMetadata(): Promise<{
-        mediaTypes: import("../entities/media_type.entity").MediaType[];
-        externalAssistance: import("../entities/external_assistance.entity").ExternalAssistance[];
-    }>;
     create(body: CreateWorkdayDTO): Promise<import("../entities/workday.entity").Workday>;
     getWorkdays({ user }: {
         user: JwtUser;

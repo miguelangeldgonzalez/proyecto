@@ -26,14 +26,14 @@ let WorkdayController = class WorkdayController {
     constructor(workdayService) {
         this.workdayService = workdayService;
     }
+    async getWorkdayMetadata() {
+        return await this.workdayService.getWorkdayMetadata();
+    }
     async getById(workdayId) {
         return await this.workdayService.getById(workdayId);
     }
     async update(workdayId, body) {
         return await this.workdayService.update(workdayId, body);
-    }
-    async getWorkdayMetadata() {
-        return await this.workdayService.getWorkdayMetadata();
     }
     async create(body) {
         return await this.workdayService.create(body);
@@ -49,6 +49,13 @@ let WorkdayController = class WorkdayController {
         return await this.workdayService.delete(workdayId);
     }
 };
+__decorate([
+    (0, common_1.Get)('/metadata'),
+    openapi.ApiResponse({ status: 200 }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], WorkdayController.prototype, "getWorkdayMetadata", null);
 __decorate([
     (0, common_1.Get)('/:workdayId'),
     openapi.ApiResponse({ status: 200, type: require("../entities/workday.entity").Workday }),
@@ -66,13 +73,6 @@ __decorate([
     __metadata("design:paramtypes", [Number, workday_dto_1.UpdateWorkdayDTO]),
     __metadata("design:returntype", Promise)
 ], WorkdayController.prototype, "update", null);
-__decorate([
-    (0, common_1.Get)('/metadata'),
-    openapi.ApiResponse({ status: 200 }),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", Promise)
-], WorkdayController.prototype, "getWorkdayMetadata", null);
 __decorate([
     (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
     (0, common_1.UseGuards)(zone_guard_1.ZoneGuard),
