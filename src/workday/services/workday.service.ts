@@ -7,7 +7,7 @@ import { Workday } from '../entities/workday.entity';
 import { MediaType } from '../entities/media_type.entity';
 import { ExternalAssistance } from '../entities/external_assistance.entity';
 
-import { CreateWorkdayDTO } from '../dtos/workday.dto';
+import { CreateWorkdayDTO, UpdateWorkdayDTO } from '../dtos/workday.dto';
 import { WorkdayLocationService } from './workday-location.service';
 import { RoleNames } from 'src/auth/entities/role.entity';
 
@@ -19,6 +19,21 @@ export class WorkdayService {
         @InjectRepository(MediaType) private mediaTypeRepo: Repository<MediaType> ,
         @InjectRepository(ExternalAssistance) private externalAssistanceRepo: Repository<ExternalAssistance>
     ) {}
+    
+    /**
+     * Get a workday by id
+     * @param workdayId 
+     */
+    async getById(workdayId: number) {
+        const w =  await this.workdayRepo.findOne({
+            where: { id: workdayId },
+            relations: ['mediaTypes', 'externalAssistance', 'workdayLocation', 'workdayLocation.borough']
+        });
+
+        if (!w) throw new NotFoundException(`No se encontró la jornada con el id ${workdayId}`);
+
+        return w;
+    }
 
     /**
      * Create a new workday
@@ -149,5 +164,56 @@ export class WorkdayService {
         if (!workday) throw new NotFoundException(`No se encontró la jornada con el id ${id}`);
 
         return await this.workdayRepo.remove(workday);
+    }
+
+    /**
+     * Get workday metadata, to add to another workday
+     * @returns 
+     */
+    async getWorkdayMetadata() {
+        return {
+            mediaTypes: await this.mediaTypeRepo.find(),
+            externalAssistance: await this.externalAssistanceRepo.find()
+        }
+    }
+
+    async update(workdayId: number, body: UpdateWorkdayDTO) {
+        const workday = await this.workdayRepo.findOne({
+            where: { id: workdayId },
+            relations: ['mediaTypes', 'externalAssistance']
+        });
+
+        if (!workday) throw new NotFoundException(`No se encontró la jornada con el id ${workdayId}`);
+
+        const manyEntities = [
+            {
+                name: 'externalAssistanceIds',
+                repo: this.externalAssistanceRepo,
+                newName: 'externalAssistance'
+            },{
+                name: 'mediaTypeIds',
+                repo: this.mediaTypeRepo,
+                newName: 'mediaTypes'
+            }
+        ];
+
+        for (const e of manyEntities) {
+            if (body[e.name]?.length > 0) {
+                const entities = await e.repo.find({
+                    where: {
+                        id: In(body[e.name])
+                    }
+                });
+
+                delete body[e.name];
+
+                if (entities.length > 0) workday[e.newName] = entities;
+            }
+        }
+
+        return await this.workdayRepo.save({
+            ...workday,
+            ...body
+        });
     }
 }

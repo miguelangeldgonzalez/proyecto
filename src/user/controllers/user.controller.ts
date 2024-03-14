@@ -67,4 +67,10 @@ export class UserController {
     async getById(@Param('id') id: number, @Req() { user }: { user: JwtUser }): Promise<User> {
         return await this.userService.getById(id, user);
     }
+
+    @Roles(RoleNames.ADMIN)
+    @Get('/resend-token/:id')
+    async resendToken(@Param('id') id: number) {
+        return await this.userService.resendToken(id);
+    }
 }

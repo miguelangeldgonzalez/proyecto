@@ -1,6 +1,6 @@
 import { hash } from 'bcrypt'; 
 import { InjectRepository } from '@nestjs/typeorm';
-import { IsNull, Repository, QueryFailedError, In, FindManyOptions, FindOptionsSelect, Not } from 'typeorm';
+import { IsNull, Repository, QueryFailedError, In, FindManyOptions, Not } from 'typeorm';
 import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 
 // Services
@@ -51,6 +51,27 @@ export class UserService {
         await this.mailerService.sendMailForCreateUser(createdUser.email, token.accessToken);
 
         return createdUser;
+    }
+
+    async resendToken(userId: number) {
+        const user = await this.userRepo.findOne({
+            where: {
+                id: userId
+            }
+        });
+
+        if (!user) {
+            throw new NotFoundException({
+                message: 'User not found'
+            });
+        }
+
+        const token = this.authService.generateJwtForCreateUser(user.id);
+        await this.mailerService.sendMailForCreateUser(user.email, token.accessToken);
+
+        return {
+            message: 'Email sent successfully'
+        }
     }
 
     async setPassword(data: SetUserPasswordDto, userId: number) {
