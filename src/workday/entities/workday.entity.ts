@@ -48,6 +48,12 @@ export class Workday extends TimeStamps {
     })
     totalExternalAssitance: number;
 
+    @Column({
+        name: 'total_collected',
+        nullable: true
+    })
+    totalCollected: number;
+
     @ManyToOne(() => WorkdayLocation, { nullable: false })
     @JoinColumn({
         name: 'workday_location_id',

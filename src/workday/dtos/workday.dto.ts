@@ -32,6 +32,10 @@ export class CreateWorkdayDTO {
 
     @IsNumber()
     @IsOptional()
+    totalCollected: number;
+
+    @IsNumber()
+    @IsOptional()
     workdayLocationId: number;
 
     @IsIdArray({ minSize: 1 })
