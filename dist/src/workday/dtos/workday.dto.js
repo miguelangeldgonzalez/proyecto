@@ -16,7 +16,7 @@ const swagger_1 = require("@nestjs/swagger");
 const common_1 = require("../../common");
 class CreateWorkdayDTO {
     static _OPENAPI_METADATA_FACTORY() {
-        return { startTime: { required: true, type: () => Date }, endTime: { required: true, type: () => Date }, mediaDescription: { required: true, type: () => String }, externalAssistanceDescription: { required: true, type: () => String }, totalExternalAssistance: { required: true, type: () => Number }, workdayLocationId: { required: true, type: () => Number }, externalAssistanceIds: { required: true, type: () => [Number] }, mediaTypeIds: { required: true, type: () => [Number] } };
+        return { startTime: { required: true, type: () => Date }, endTime: { required: true, type: () => Date }, mediaDescription: { required: true, type: () => String }, externalAssistanceDescription: { required: true, type: () => String }, totalExternalAssistance: { required: true, type: () => Number }, totalCollected: { required: true, type: () => Number }, workdayLocationId: { required: true, type: () => Number }, externalAssistanceIds: { required: true, type: () => [Number] }, mediaTypeIds: { required: true, type: () => [Number] } };
     }
 }
 __decorate([
@@ -44,6 +44,11 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], CreateWorkdayDTO.prototype, "totalExternalAssistance", void 0);
+__decorate([
+    (0, class_validator_1.IsNumber)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Number)
+], CreateWorkdayDTO.prototype, "totalCollected", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.IsOptional)(),

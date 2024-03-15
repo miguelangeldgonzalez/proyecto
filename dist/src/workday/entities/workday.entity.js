@@ -19,7 +19,7 @@ const external_assistance_entity_1 = require("./external_assistance.entity");
 const volunteer_entity_1 = require("../../volunteer/entities/volunteer.entity");
 let Workday = class Workday extends common_1.TimeStamps {
     static _OPENAPI_METADATA_FACTORY() {
-        return { id: { required: true, type: () => Number }, startTime: { required: true, type: () => Date }, endTime: { required: true, type: () => Date }, mediaDescription: { required: true, type: () => String }, externalAssistanceDescription: { required: true, type: () => String }, totalExternalAssitance: { required: true, type: () => Number }, workdayLocation: { required: true, type: () => require("./workday_location.entity").WorkdayLocation }, mediaTypes: { required: true, type: () => [require("./media_type.entity").MediaType] }, externalAssistance: { required: true, type: () => [require("./external_assistance.entity").ExternalAssistance] }, volunteers: { required: true, type: () => [require("../../volunteer/entities/volunteer.entity").Volunteer] } };
+        return { id: { required: true, type: () => Number }, startTime: { required: true, type: () => Date }, endTime: { required: true, type: () => Date }, mediaDescription: { required: true, type: () => String }, externalAssistanceDescription: { required: true, type: () => String }, totalExternalAssitance: { required: true, type: () => Number }, totalCollected: { required: true, type: () => Number }, workdayLocation: { required: true, type: () => require("./workday_location.entity").WorkdayLocation }, mediaTypes: { required: true, type: () => [require("./media_type.entity").MediaType] }, externalAssistance: { required: true, type: () => [require("./external_assistance.entity").ExternalAssistance] }, volunteers: { required: true, type: () => [require("../../volunteer/entities/volunteer.entity").Volunteer] } };
     }
 };
 __decorate([
@@ -59,6 +59,13 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], Workday.prototype, "totalExternalAssitance", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        name: 'total_collected',
+        nullable: true
+    }),
+    __metadata("design:type", Number)
+], Workday.prototype, "totalCollected", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => workday_location_entity_1.WorkdayLocation, { nullable: false }),
     (0, typeorm_1.JoinColumn)({

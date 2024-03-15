@@ -6,6 +6,7 @@ export declare class CreateWorkdayDTO {
     mediaDescription: string;
     externalAssistanceDescription: string;
     totalExternalAssistance: number;
+    totalCollected: number;
     workdayLocationId: number;
     externalAssistanceIds: number[];
     mediaTypeIds: number[];

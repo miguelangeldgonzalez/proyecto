@@ -27,6 +27,7 @@ export declare class WorkdayService {
         mediaDescription: string;
         externalAssistanceDescription: string;
         totalExternalAssistance?: number;
+        totalCollected: number;
         workdayLocationId?: number;
         externalAssistanceIds?: number[];
         mediaTypeIds?: number[];
