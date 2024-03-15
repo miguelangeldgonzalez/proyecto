@@ -46,7 +46,7 @@ export class Workday extends TimeStamps {
         name: 'total_external_assistance',
         nullable: true
     })
-    totalExternalAssitance: number;
+    totalExternalAssistance: number;
 
     @Column({
         name: 'total_collected',
