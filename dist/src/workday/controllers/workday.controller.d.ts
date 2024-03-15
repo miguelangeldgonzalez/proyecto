@@ -14,13 +14,12 @@ export declare class WorkdayController {
         endTime: Date;
         mediaDescription: string;
         externalAssistanceDescription: string;
-        totalExternalAssistance?: number;
+        totalExternalAssistance: number;
         totalCollected: number;
         workdayLocationId?: number;
         externalAssistanceIds?: number[];
         mediaTypeIds?: number[];
         id: number;
-        totalExternalAssitance: number;
         workdayLocation: import("../entities/workday_location.entity").WorkdayLocation;
         mediaTypes: import("../entities/media_type.entity").MediaType[];
         externalAssistance: import("../entities/external_assistance.entity").ExternalAssistance[];

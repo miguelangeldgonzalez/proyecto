@@ -9,7 +9,7 @@ export declare class Workday extends TimeStamps {
     endTime: Date;
     mediaDescription: string;
     externalAssistanceDescription: string;
-    totalExternalAssitance: number;
+    totalExternalAssistance: number;
     totalCollected: number;
     workdayLocation: WorkdayLocation;
     mediaTypes: MediaType[];

@@ -26,13 +26,12 @@ export declare class WorkdayService {
         endTime: Date;
         mediaDescription: string;
         externalAssistanceDescription: string;
-        totalExternalAssistance?: number;
+        totalExternalAssistance: number;
         totalCollected: number;
         workdayLocationId?: number;
         externalAssistanceIds?: number[];
         mediaTypeIds?: number[];
         id: number;
-        totalExternalAssitance: number;
         workdayLocation: import("../entities/workday_location.entity").WorkdayLocation;
         mediaTypes: MediaType[];
         externalAssistance: ExternalAssistance[];
