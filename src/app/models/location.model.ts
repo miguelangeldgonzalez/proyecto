@@ -1,5 +1,5 @@
-import { FormControlled } from "./constants";
 import { Borough } from "./zone.model";
+import { FormControlled } from "../common/constants";
 
 /**
  * @description Base interface for workday location DTOs

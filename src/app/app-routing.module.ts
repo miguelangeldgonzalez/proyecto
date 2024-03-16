@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterModule, RouterStateSnapshot, Routes } from '@angular/router';
 
+import { adminGuard, loggedGuard } from './guards/auth.guard';
+
 // Pages
+import { UsersComponent } from './pages/users/users.component';
 import { LoginComponent } from './pages/login/login.component';
+import { SingUpComponent } from './pages/sing-up/sing-up.component';
+import { WorkdayComponent } from './pages/workday/workday.component';
 import { LocationComponent } from './pages/location/location.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
-import { adminGuard, loggedGuard } from './guards/auth.guard';
-import { UsersComponent } from './pages/users/users.component';
-import { AddVolunteerComponent } from './pages/add-volunteer/add-volunteer.component';
 
 
 const routes: Routes = [
   {
     path: 'jornadas/:id',
-    component: AddVolunteerComponent,
+    component: WorkdayComponent,
     canActivate: [loggedGuard]
   },
   {
@@ -24,6 +26,10 @@ const routes: Routes = [
     data: {
       authGuardRedirect: '/jornadas'
     }
+  },
+  {
+    path: 'set-password',
+    component: SingUpComponent
   },
   {
     path: 'jornadas',

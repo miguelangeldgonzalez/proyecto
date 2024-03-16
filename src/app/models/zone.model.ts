@@ -1,17 +1,11 @@
-/**
- * @description Base interface for state, municipality and borough
- */
-interface GeoLocation {
-  id: number;
-  name: string;
-}
+import { BasicModel } from "../common/constants";
 
-export interface State extends GeoLocation {
+export interface State extends BasicModel {
   municipalities: Municipality[];
 }
 
-export interface Municipality extends GeoLocation {
+export interface Municipality extends BasicModel {
   boroughs: Borough[];
 }
 
-export interface Borough extends GeoLocation {}
+export interface Borough extends BasicModel {}

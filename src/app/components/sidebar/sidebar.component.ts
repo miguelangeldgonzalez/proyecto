@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { LocalStorageService } from '../../services/local-storage.service';
 import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+
 import { LoggedUser, Roles } from '../../models/auth.model';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 @Component({
   selector: 'app-sidebar',

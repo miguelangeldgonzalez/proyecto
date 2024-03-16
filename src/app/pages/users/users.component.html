@@ -110,7 +110,11 @@
     <ng-container matColumnDef="delete">
       <mat-header-cell *matHeaderCellDef>Eliminar</mat-header-cell>
       <mat-cell class="trash-cell" *matCellDef="let user">
-        <icon-trash (click)="onRowClicked(user)"></icon-trash>
+        @if (!user.deleting) {
+          <icon-trash (click)="onRowClicked(user)"></icon-trash>
+        } @else {
+          <app-loader [dark]="true"></app-loader>
+        }
       </mat-cell>
     </ng-container>
 

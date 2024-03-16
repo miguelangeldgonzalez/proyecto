@@ -3,12 +3,11 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import { FormControlStatus } from '../../common/constants';
+import { FormControlStatus, setToTop } from '../../common/constants';
 import { shakeInputsError } from '../../common/shake-error';
 import { WorkdayLocationService } from '../../services/workday-location.service';
 import { ZoneSelectComponent } from '../../components/zone-select/zone-select.component';
 import { GetWorkdayLocationDTO, WorkdayLocationFormControl } from '../../models/location.model';
-import { setToTop } from '../../models/constants';
 
 @Component({
   selector: 'app-location',

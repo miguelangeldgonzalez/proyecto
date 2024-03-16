@@ -125,3 +125,15 @@ label {
 .invalid-password.active {
   visibility: visible;
 }
+
+.credit {
+  font-size: 0.65rem;
+  text-decoration: none;
+  color: $button-gray;
+  margin-left: 10px;
+  display: block;
+}
+
+.credit, .credit p {
+  width: fit-content;
+}

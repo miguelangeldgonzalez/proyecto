@@ -1,0 +1,44 @@
+<div class="container_alligner">
+  <div class="container">
+    @if(userName != '') {
+      <h2>Bievenido a Proyecto Sirena <br> {{ userName }}</h2>
+
+      <div class="form_container">
+        <div class="form_group">
+          <label for="">Escribe tu contraseña</label>
+          <input type="password" class="input" (keyup)="validatePassword($event.srcElement)">
+        </div>
+        <div class="form_group">
+          <label for="">Confirma tu contraseña</label>
+          <input type="password" class="input" (keyup)="validateConfirmPassword($event.srcElement)">
+        </div>
+        <button (click)="singUp()">Aceptar</button>
+      </div>
+    } @else {
+      <div class="loader_container">
+        <app-loader></app-loader>
+      </div>
+    }
+  </div>
+
+  <div class="instruction_container">
+    <span>La Contraseña Debe Tener</span>
+    <ul>
+      @for (validation of validations; track validations) {
+        <li>
+          @if (validation.valid) {
+            <icon-check
+              [check]="validation.valid && validation.checked"
+            ></icon-check>
+          } @else {
+            <icon-wrong
+              [wrong]="!validation.valid && validation.checked"
+            ></icon-wrong>
+          }
+
+          {{ validation.content }}
+        </li>
+      }
+    </ul>
+  </div>
+</div>

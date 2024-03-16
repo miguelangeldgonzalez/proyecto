@@ -1,5 +1,5 @@
-import { FormControlled } from "./constants";
 import { Borough } from "./zone.model";
+import { FormControlled } from "../common/constants";
 
 export interface GetVolunteerDTO {
   id: number;

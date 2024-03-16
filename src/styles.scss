@@ -87,3 +87,7 @@ input[type=number] {
   -moz-appearance: textfield;
   -webkit-inner-spin-button: none;
 }
+
+body:has(app-login) {
+  overflow: hidden;
+}

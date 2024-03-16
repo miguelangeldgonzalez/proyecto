@@ -30,4 +30,30 @@ export class UserService {
       }
     });
   }
+
+  getTokenStatus(token: string) {
+    return this.httpClient.get(this.HOST + '/token-status', {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
+
+  setPassword(password: string, token: string) {
+    return this.httpClient.patch(this.HOST + '/set-password', {
+      password
+    }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
+  }
+
+  delete(id: number) {
+    return this.httpClient.delete(this.HOST + `/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${this.localStorageService.getUserToken()}`
+      }
+    });
+  }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavigationStart, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, ActivationEnd, NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -9,14 +9,20 @@ import { NavigationStart, Router } from '@angular/router';
 })
 export class AppComponent {
   public title: string = 'proyecto-sirena';
-  public isRootLocation:boolean = false;
+  public isRootLocation: boolean = false;
 
-  private rootLocations = ['', '/']
+  private rootLocations = ['', '/', '/set-password', 'set-password']
 
   constructor(private router: Router) {
     this.router.events.subscribe(v => {
       if (v instanceof NavigationStart){
-        this.isRootLocation = this.rootLocations.includes(v.url);
+        this.rootLocations.forEach(e => {
+          this.isRootLocation = v.url.includes(e)
+        });
+
+        if (!this.isRootLocation) {
+          this.isRootLocation = this.rootLocations.includes(v.url)
+        }
       }
     })
   }

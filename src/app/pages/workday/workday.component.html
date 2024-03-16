@@ -1,0 +1,58 @@
+@if (loading) {
+  <div class="loader_container">
+    <app-loader></app-loader>
+  </div>
+} @else {
+  @if (workdayClosed) {
+    <div class="report_container">
+      <h1>La Jornada ha Cerrado</h1>
+      <form [formGroup]="createForm">
+        <div class="form_group">
+          <label>Describa el tipo de ayuda externa recibida</label>
+          <input type="text" placeholder="Opcional" class="input" formControlName="externalAssistanceDescription">
+        </div>
+        <div class="form_group">
+          <label>Describa el tipo de medios que asistieron</label>
+          <input type="text" placeholder="Opcional" class="input" formControlName="mediaDescription">
+        </div>
+        <div class="form_group">
+          <label>¿Cuantas personas ayudaron en la jornada?</label>
+          <input type="number" placeholder="Opcional" class="input" formControlName="totalExternalAssistance">
+        </div>
+        <div class="form_group">
+          <label>¿Cuanto cabello se recolectó en la jornada? (en Kg)</label>
+          <input type="number" placeholder="Opcional" class="input" formControlName="totalCollected">
+        </div>
+
+        <div class="form_group">
+          <label>¿Que clase de medios de comunicación asistieron?</label>
+          <div class="checkbox_container media_types">
+            @for (media of workdayMetadata.mediaTypes; track workdayMetadata.mediaTypes) {
+              <div class="checkbox_container">
+                <input type="checkbox" [id]="'m' + media.id" [checked]="find(media.id, 'mediaTypes')">
+                <label>{{' ' + media.name}}</label>
+              </div>
+            }
+          </div>
+        </div>
+
+        <div class="form_group">
+          <label>¿Que clase de medios de comunicación asistieron?</label>
+          <div class="checkbox_container external_assistance">
+            @for (media of workdayMetadata.externalAssistance; track workdayMetadata.externalAssistance) {
+              <div class="checkbox_container">
+                <input type="checkbox" [id]="'m' + media.id" [checked]="find(media.id, 'externalAssistance')">
+                <label>{{' ' + media.name}}</label>
+              </div>
+            }
+          </div>
+        </div>
+      </form>
+
+      <app-button (onClick)="patch()" [value]="'Aceptar'"></app-button>
+    </div>
+  } @else {
+    <app-add-volunteer></app-add-volunteer>
+  }
+}
+

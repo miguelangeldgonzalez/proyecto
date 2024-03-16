@@ -1,7 +1,7 @@
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Angular Material
@@ -30,6 +30,8 @@ import { CardWorkdayComponent } from './components/card-workday/card-workday.com
 import { CardLocationComponent } from './components/card-location/card-location.component';
 import { StateSelectedComponent } from './components/state-selected/state-selected.component';
 import { FormSearchVolunteerComponent } from './components/form-search-volunteer/form-search-volunteer.component';
+import { SingUpComponent } from './pages/sing-up/sing-up.component';
+import { WorkdayComponent } from './pages/workday/workday.component';
 
 @NgModule({
   declarations: [
@@ -37,6 +39,8 @@ import { FormSearchVolunteerComponent } from './components/form-search-volunteer
     AppComponent,
     LoginComponent,
     UsersComponent,
+    SingUpComponent,
+    WorkdayComponent,
     LocationComponent,
     DashboardComponent,
     AddVolunteerComponent,

@@ -79,8 +79,20 @@ export class UsersComponent implements OnInit {
     }
   }
 
-  onRowClicked(arg0: any) {
-    console.log(arg0);
+  onRowClicked(user: GetUserDTO) {
+    const index = this.users.findIndex(u => u.id === user.id);
+    this.users[index].deleting = !this.users[index].deleting;
+
+    this.userService.delete(user.id)
+      .subscribe(rta => {
+        if (rta instanceof HttpErrorResponse) {
+          alert('Error al eliminar el usuario, por favor pongase en contacto con el administrador del sistema.');
+        } else {
+          const index = this.users.findIndex(u => u.id === user.id);
+          this.users.splice(index, 1);
+          this.table?.renderRows();
+        }
+      })
   }
 
   handleChangeState($event: Event) {

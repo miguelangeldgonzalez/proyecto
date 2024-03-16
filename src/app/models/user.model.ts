@@ -7,6 +7,7 @@ export interface GetUserDTO {
     id: number;
     role: Role;
     states: Array<State>;
+    deleting?: boolean;
 }
 
 
