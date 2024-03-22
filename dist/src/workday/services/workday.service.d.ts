@@ -11,6 +11,7 @@ export declare class WorkdayService {
     private mediaTypeRepo;
     private externalAssistanceRepo;
     constructor(workdayLocationService: WorkdayLocationService, workdayRepo: Repository<Workday>, mediaTypeRepo: Repository<MediaType>, externalAssistanceRepo: Repository<ExternalAssistance>);
+    calculateVolunteers(workdayId: number): Promise<number>;
     getById(workdayId: number): Promise<Workday>;
     create(data: CreateWorkdayDTO): Promise<Workday>;
     getWorkdayById(id: number): Promise<Workday>;
@@ -36,6 +37,7 @@ export declare class WorkdayService {
         mediaTypes: MediaType[];
         externalAssistance: ExternalAssistance[];
         volunteers: import("../../volunteer/entities/volunteer.entity").Volunteer[];
+        totalVolunteers: number;
         createdAt: Date;
         updatedAt: Date;
         deletedAt?: Date;

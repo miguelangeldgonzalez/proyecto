@@ -30,6 +30,12 @@ let AuthService = class AuthService {
             accessToken
         };
     }
+    generateJwtForResetPassword(email) {
+        const accessToken = this.jwtService.sign({ email, resetPassword: true });
+        return {
+            accessToken
+        };
+    }
     verifyToken(token) {
         try {
             return this.jwtService.verify(token);

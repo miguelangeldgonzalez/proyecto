@@ -24,6 +24,7 @@ export declare class WorkdayController {
         mediaTypes: import("../entities/media_type.entity").MediaType[];
         externalAssistance: import("../entities/external_assistance.entity").ExternalAssistance[];
         volunteers: import("../../volunteer/entities/volunteer.entity").Volunteer[];
+        totalVolunteers: number;
         createdAt: Date;
         updatedAt: Date;
         deletedAt?: Date;

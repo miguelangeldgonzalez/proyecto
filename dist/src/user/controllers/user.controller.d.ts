@@ -1,4 +1,4 @@
-import { JwtCreateUserReturn, JwtUser } from 'src/auth/guards/jwt-auth.guard';
+import { JwtCreateUserReturn, JwtUser, JwtForgotPasswordReturn } from 'src/auth/guards/jwt-auth.guard';
 import { User } from '../entities/user.entity';
 import { UserService } from '../services/user.service';
 import { CreateUserDtoRequest, SetUserPasswordDto } from '../dtos/user.dto';
@@ -18,6 +18,9 @@ export declare class UserController {
     setPassword(body: SetUserPasswordDto, { user }: JwtCreateUserReturn): Promise<{
         message: string;
     }>;
+    resetPassword({ password }: SetUserPasswordDto, { user }: JwtForgotPasswordReturn): Promise<{
+        message: string;
+    }>;
     getAll({ user }: {
         user: JwtUser;
     }): Promise<User[]>;
@@ -25,6 +28,11 @@ export declare class UserController {
         user: JwtUser;
     }): Promise<User>;
     resendToken(id: number): Promise<{
+        message: string;
+    }>;
+    forgotPassword({ email }: {
+        email: string;
+    }): Promise<{
         message: string;
     }>;
 }

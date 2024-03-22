@@ -15,4 +15,5 @@ export declare class Workday extends TimeStamps {
     mediaTypes: MediaType[];
     externalAssistance: ExternalAssistance[];
     volunteers: Volunteer[];
+    totalVolunteers: number;
 }

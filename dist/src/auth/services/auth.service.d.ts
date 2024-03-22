@@ -10,6 +10,9 @@ export declare class AuthService {
     generateJwtForCreateUser(userId: number): {
         accessToken: string;
     };
+    generateJwtForResetPassword(email: string): {
+        accessToken: string;
+    };
     verifyToken<T>(token: string): T & ReturnVerifyTokenDto;
     private generateLoginJwt;
     login(email: any, password: any): Promise<ReturnLoginUserDto>;

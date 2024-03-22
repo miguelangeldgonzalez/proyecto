@@ -29,6 +29,14 @@ let MailerService = class MailerService {
             html: `Bienvenido a Proyecto Sirena <a href="https://proyecto-sirena.netlify.app/set-password?token=${token}">Verifica tu correo</a>`,
         });
     }
+    async sendMailForPasswordRecover(to, token) {
+        return await this.transporter.sendMail({
+            from: this.mailConfig.auth.user,
+            to,
+            subject: 'Has olvidado tu contraseña',
+            html: `Para recuperar tu contraseña <a href="https://proyecto-sirena.netlify.app/set-password?token=${token}&reseting-password=true">Ve a este enlace</a>`,
+        });
+    }
 };
 MailerService = __decorate([
     (0, common_1.Injectable)(),

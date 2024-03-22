@@ -16,10 +16,11 @@ exports.UserController = void 0;
 const openapi = require("@nestjs/swagger");
 const common_1 = require("@nestjs/common");
 const role_guard_1 = require("../../auth/guards/role.guard");
+const role_decorator_1 = require("../../auth/decorators/role.decorator");
+const public_decorator_1 = require("../../auth/decorators/public.decorator");
 const jwt_auth_guard_1 = require("../../auth/guards/jwt-auth.guard");
 const role_entity_1 = require("../../auth/entities/role.entity");
 const user_service_1 = require("../services/user.service");
-const role_decorator_1 = require("../../auth/decorators/role.decorator");
 const user_dto_1 = require("../dtos/user.dto");
 let UserController = class UserController {
     constructor(userService) {
@@ -50,6 +51,9 @@ let UserController = class UserController {
     async setPassword(body, { user }) {
         return await this.userService.setPassword(body, user.userId);
     }
+    async resetPassword({ password }, { user }) {
+        return await this.userService.resetPassword(password, user.email);
+    }
     async getAll({ user }) {
         return await this.userService.getAll(user);
     }
@@ -58,6 +62,9 @@ let UserController = class UserController {
     }
     async resendToken(id) {
         return await this.userService.resendToken(id);
+    }
+    async forgotPassword({ email }) {
+        return await this.userService.forgotPassword(email);
     }
 };
 __decorate([
@@ -97,6 +104,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "setPassword", null);
 __decorate([
+    (0, common_1.Patch)('reset-password'),
+    openapi.ApiResponse({ status: 200 }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.SetUserPasswordDto, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "resetPassword", null);
+__decorate([
     (0, role_decorator_1.Roles)(role_entity_1.RoleNames.ADMIN, role_entity_1.RoleNames.STATE_MANAGER),
     (0, common_1.Get)(),
     openapi.ApiResponse({ status: 200, type: [require("../entities/user.entity").User] }),
@@ -124,6 +140,15 @@ __decorate([
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "resendToken", null);
+__decorate([
+    (0, public_decorator_1.Public)(),
+    (0, common_1.Post)('/forgot-password'),
+    openapi.ApiResponse({ status: 201 }),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "forgotPassword", null);
 UserController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, role_guard_1.RoleGuard),
     (0, common_1.Controller)('user'),

@@ -22,10 +22,16 @@ export declare class UserService {
     setPassword(data: SetUserPasswordDto, userId: number): Promise<{
         message: string;
     }>;
+    resetPassword(password: string, email: string): Promise<{
+        message: string;
+    }>;
     delete(id: number): Promise<{
         message: string;
     }>;
     getAll(user: JwtUser): Promise<User[]>;
     getById(id: number, user: JwtUser): Promise<User>;
     getUserName(id: number): Promise<User>;
+    forgotPassword(email: string): Promise<{
+        message: string;
+    }>;
 }

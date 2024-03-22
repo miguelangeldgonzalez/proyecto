@@ -28,11 +28,16 @@ let WorkdayService = class WorkdayService {
         this.mediaTypeRepo = mediaTypeRepo;
         this.externalAssistanceRepo = externalAssistanceRepo;
     }
+    async calculateVolunteers(workdayId) {
+        const count = await this.workdayRepo.query('SELECT COUNT(*) FROM workday_volunteer WHERE workday_id = $1', [workdayId]);
+        return parseInt(count[0].count) || 0;
+    }
     async getById(workdayId) {
         const w = await this.workdayRepo.findOne({
             where: { id: workdayId },
             relations: ['mediaTypes', 'externalAssistance', 'workdayLocation', 'workdayLocation.borough']
         });
+        w.totalVolunteers = await this.calculateVolunteers(workdayId);
         if (!w)
             throw new common_1.NotFoundException(`No se encontró la jornada con el id ${workdayId}`);
         return w;
