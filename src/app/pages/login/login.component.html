@@ -18,10 +18,16 @@
     </div>
 
     <div class="recovery">
-      <form class="form">
+      <form #recover="ngForm" class="form" (ngSubmit)="resetPassword(recover)">
         <label for="chk" aria-hidden="true">Recuperar Contraseña</label>
-        <input class="input" type="email" name="email" placeholder="Email" required="">
-        <button>Recuperar</button>
+        <input class="input" type="email" name="email" placeholder="Email" required ngModel>
+        <button>
+          @if(loadingResetPassword) {
+            <app-loader></app-loader>
+          } @else {
+            Recuperar
+          }
+        </button>
       </form>
     </div>
 

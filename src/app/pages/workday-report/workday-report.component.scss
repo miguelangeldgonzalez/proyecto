@@ -1,0 +1,71 @@
+@import "../../../variables.scss";
+
+.loader_container {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-content: center;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.loader_container ::ng-deep {
+  transform: scale(3);
+}
+
+.form_group{
+  display: flex;
+  flex-direction: column;
+  width: 95%;
+  gap: 20px;
+}
+
+.report_container {
+  width: 70%;
+  margin: 0 auto;
+  margin-top: 40px;
+  padding-bottom: 40px;
+}
+
+.report_container, .report_container form {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.checkbox_container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+h1 {
+  text-align: center;
+}
+
+app-button {
+  margin: 0 auto;
+}
+
+.total-volunteers__form-group, .total-volunteers__container  {
+  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.total-volunteers__container {
+  width: 2rem;
+  height: 2rem;
+  color: white;
+  border-radius: 50%;
+  background-color: $button-blue-hover;
+}
+
+#total-volunteers {
+  position: relative;
+  width: fit-content;
+  background-color: transparent;
+}

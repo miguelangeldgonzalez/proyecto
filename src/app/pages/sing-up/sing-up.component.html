@@ -1,7 +1,11 @@
 <div class="container_alligner">
   <div class="container">
     @if(userName != '') {
-      <h2>Bievenido a Proyecto Sirena <br> {{ userName }}</h2>
+      @if (resetingPassword) {
+        <h2>Ingrese una nueva contraseña</h2>
+      } @else {
+        <h2>Bievenido a Proyecto Sirena <br> {{ userName }}</h2>
+      }
 
       <div class="form_container">
         <div class="form_group">
@@ -12,7 +16,13 @@
           <label for="">Confirma tu contraseña</label>
           <input type="password" class="input" (keyup)="validateConfirmPassword($event.srcElement)">
         </div>
-        <button (click)="singUp()">Aceptar</button>
+        <button (click)="send()">
+          @if(loading) {
+            <app-loader></app-loader>
+          } @else {
+            Iniciar Sesion
+          }
+        </button>
       </div>
     } @else {
       <div class="loader_container">

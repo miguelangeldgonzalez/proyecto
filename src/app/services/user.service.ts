@@ -56,4 +56,17 @@ export class UserService {
       }
     });
   }
+
+
+  resetPassword(email: string) {
+    return this.httpClient.post(`${this.HOST}/forgot-password`, { email })
+  }
+
+  sendNewPassword(password: string, token: string) {
+    return this.httpClient.patch(`${this.HOST}/reset-password`, { password }, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    })
+  }
 }

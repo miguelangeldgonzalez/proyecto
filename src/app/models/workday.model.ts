@@ -15,6 +15,7 @@ export interface GetWorkdayDTO extends CreateWorkdayDTO {
   endTime: Date;
   startTime: Date;
   totalCollected: number;
+  totalVolunteers: number;
   mediaDescription: string;
   totalExternalAssistance: number;
   externalAssistanceDescription: string;

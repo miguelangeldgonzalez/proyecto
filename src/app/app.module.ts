@@ -19,19 +19,19 @@ import { AppComponent } from './app.component';
 
 import { LoginComponent } from './pages/login/login.component';
 import { UsersComponent } from './pages/users/users.component';
+import { SingUpComponent } from './pages/sing-up/sing-up.component';
+import { DashboardComponent } from './pages/workday/workday.component';
 import { ButtonComponent } from './components/button/button.component';
 import { LoaderComponent } from './components/loader/loader.component';
 import { LocationComponent } from './pages/location/location.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ZoneSelectComponent } from './components/zone-select/zone-select.component';
 import { AddVolunteerComponent } from './pages/add-volunteer/add-volunteer.component';
 import { CardWorkdayComponent } from './components/card-workday/card-workday.component';
+import { WorkdayReportComponent } from './pages/workday-report/workday-report.component';
 import { CardLocationComponent } from './components/card-location/card-location.component';
 import { StateSelectedComponent } from './components/state-selected/state-selected.component';
 import { FormSearchVolunteerComponent } from './components/form-search-volunteer/form-search-volunteer.component';
-import { SingUpComponent } from './pages/sing-up/sing-up.component';
-import { WorkdayComponent } from './pages/workday/workday.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,7 @@ import { WorkdayComponent } from './pages/workday/workday.component';
     LoginComponent,
     UsersComponent,
     SingUpComponent,
-    WorkdayComponent,
+    WorkdayReportComponent,
     LocationComponent,
     DashboardComponent,
     AddVolunteerComponent,

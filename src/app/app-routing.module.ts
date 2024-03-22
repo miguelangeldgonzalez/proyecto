@@ -7,16 +7,16 @@ import { adminGuard, loggedGuard } from './guards/auth.guard';
 import { UsersComponent } from './pages/users/users.component';
 import { LoginComponent } from './pages/login/login.component';
 import { SingUpComponent } from './pages/sing-up/sing-up.component';
-import { WorkdayComponent } from './pages/workday/workday.component';
+import { WorkdayReportComponent } from './pages/workday-report/workday-report.component';
 import { LocationComponent } from './pages/location/location.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { DashboardComponent } from './pages/workday/workday.component';
 
 
 
 const routes: Routes = [
   {
     path: 'jornadas/:id',
-    component: WorkdayComponent,
+    component: WorkdayReportComponent,
     canActivate: [loggedGuard]
   },
   {

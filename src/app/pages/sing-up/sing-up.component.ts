@@ -10,8 +10,14 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrl: './sing-up.component.scss'
 })
 export class SingUpComponent {
-  public userName: string = 'María';
+  public userName: string = '';
   public password: string = '';
+  public loading: boolean = false;
+  public resetingPassword: boolean = false;
+  public passwordConfirmation: string = '';
+
+
+  private token: string = '';
 
   public validations: {
     content: string,
@@ -47,12 +53,12 @@ export class SingUpComponent {
   ) { }
 
   ngOnInit(): void {
-    const token = this.route.snapshot.queryParams['token'];
+    this.token = this.route.snapshot.queryParams['token'];
+    this.resetingPassword = this.route.snapshot.queryParams['reseting-password'];
 
-    this.userService.getTokenStatus(token)
+    this.userService.getTokenStatus(this.token)
       .pipe(catchError(err => of(err)))
       .subscribe(rta => {
-        console.log(rta);
         if (rta instanceof HttpErrorResponse) {
           if (rta.status == 401) {
             this.router.navigate(['/']);
@@ -63,9 +69,7 @@ export class SingUpComponent {
       })
   }
 
-  public validatePassword(event: any): void {
-    this.password = event.value;
-
+  private runValidations() {
     this.validations[0].valid = this.password.length >= 8;
     this.validations[0].checked = true;
 
@@ -74,25 +78,56 @@ export class SingUpComponent {
 
     this.validations[2].valid = /[0-9]/.test(this.password);
     this.validations[2].checked = true;
-  }
 
-  public validateConfirmPassword(event: any): void {
-    this.validations[3].valid = this.password === event.value;
+    this.validations[0].valid = this.password.length >= 8;
+    this.validations[0].checked = true;
+
+    this.validations[3].valid = this.password === this.passwordConfirmation;
     this.validations[3].checked = true;
   }
 
+  private finish(rta: HttpErrorResponse | any) {
+    if (rta instanceof HttpErrorResponse) {
+      alert('Ha ocurrido un error al intentar establecer la contraseña por favor pongase en contacto con el administrador del sistema')
+    } else {
+      alert('Contraseña establecida correctamente');
+    }
+
+    this.loading = false;
+    this.router.navigate(['/']);
+  }
+
+  public validatePassword(event: any): void {
+    this.password = event.value;
+    this.runValidations();
+  }
+
+  public validateConfirmPassword(event: any): void {
+    this.passwordConfirmation = event.value;
+    this.runValidations();
+  }
+
   public singUp(): void {
+    this.userService.setPassword(this.password, this.token)
+      .pipe(catchError(err => of(err)))
+      .subscribe(rta => this.finish(rta));
+
+  }
+
+  public resetPassword(): void {
+    this.userService.sendNewPassword(this.password, this.token)
+      .pipe(catchError(err => of(err)))
+      .subscribe(rta => this.finish(rta));
+  }
+
+  public send() {
     if (this.validations.every(v => v.valid)) {
-      this.userService.setPassword(this.password, this.route.snapshot.queryParams['token'])
-        .pipe(catchError(err => of(err)))
-        .subscribe(rta => {
-          if (rta instanceof HttpErrorResponse) {
-            alert('Ha ocurrido un error al intentar establecer la contraseña por favor pongase en contacto con el administrador del sistema')
-          } else {
-            alert('Contraseña establecida correctamente');
-          }
-          this.router.navigate(['/']);
-        });
+      this.loading = true;
+      if (this.resetingPassword) {
+        this.resetPassword();
+      } else {
+        this.singUp();
+      }
     }
   }
 }

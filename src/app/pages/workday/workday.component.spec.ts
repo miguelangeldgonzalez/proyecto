@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WorkdayComponent } from './workday.component';
+import { DashboardComponent } from './workday.component';
 
-describe('WorkdayComponent', () => {
-  let component: WorkdayComponent;
-  let fixture: ComponentFixture<WorkdayComponent>;
+describe('DashboardComponent', () => {
+  let component: DashboardComponent;
+  let fixture: ComponentFixture<DashboardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [WorkdayComponent]
+      imports: [DashboardComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(WorkdayComponent);
+
+    fixture = TestBed.createComponent(DashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

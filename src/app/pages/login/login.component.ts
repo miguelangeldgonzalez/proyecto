@@ -1,6 +1,6 @@
 import { catchError, of } from 'rxjs';
 import { Router } from '@angular/router';
-import { FormGroup } from '@angular/forms';
+import { Form, FormGroup } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -9,7 +9,8 @@ import { AuthService } from '../../services/auth.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 
 import { UserLogin } from '../../models/auth.model';
-import { FormControlStatus, FormValue } from '../../common/constants';
+import { FormControlStatus, FormValue, setToTop } from '../../common/constants';
+import { UserService } from '../../services/user.service';
 
 
 @Component({
@@ -29,6 +30,11 @@ export class LoginComponent {
   loadingLogin: boolean = false;
 
   /**
+   * Shows the loading spinner when the user sends the reset password email
+   */
+  loadingResetPassword: boolean = false;
+
+  /**
    * Set up a red outline in the input when the value is invalid
    */
   error = {
@@ -39,9 +45,12 @@ export class LoginComponent {
   constructor(
     private router: Router,
     private authService: AuthService,
+    private userService: UserService,
     private localStorageService: LocalStorageService
 
-  ) { }
+  ) {
+    setToTop();
+  }
 
   /**
    * Handle the login form submit
@@ -88,5 +97,22 @@ export class LoginComponent {
               (this.error as any)[key] = false;
             })
           }, 300)
+  }
+
+  resetPassword(f: FormValue<{email: string}>) {
+    if (f.form.status === FormControlStatus.VALID) {
+      this.loadingResetPassword = true;
+      this.userService.resetPassword(f.value.email)
+        .pipe(catchError(err => of(err)))
+        .subscribe(rta => {
+          if (rta instanceof HttpErrorResponse) {
+            alert('Ha ocurrido un error al enviar el email de recuperación de contraseña. Por favor, intente nuevamente.');
+          } else {
+            alert('Le hemos enviado un correo con un enlace para que pueda recuperar su contraseña.');
+          }
+
+          this.loadingResetPassword = false;
+        })
+    }
   }
 }
