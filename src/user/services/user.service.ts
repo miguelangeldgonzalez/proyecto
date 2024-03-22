@@ -102,6 +102,30 @@ export class UserService {
         }
     }
 
+    async resetPassword(password: string, email: string) {
+        const user = await this.userRepo.findOne({ where: { email } });
+
+        if (!user) {
+            throw new ForbiddenException({
+                message: 'invalid token'
+            });
+        }
+
+        user.password = await hash(password, 10);
+
+        try {
+            await this.userRepo.save(user);
+        } catch (error) {
+            throw new ForbiddenException({
+                message: 'invalid token'
+            });
+        }
+        
+        return {
+            message: 'Password set successfully'
+        }
+    }
+
     async delete(id: number) {
         try {
             await this.userRepo.delete(id);
@@ -180,5 +204,25 @@ export class UserService {
             where: { id },
             select: ['id', 'name']
         })
+    }
+
+
+    async forgotPassword(email: string) {
+        const user = await this.userRepo.findOne({
+            where: { email }
+        });
+
+        if (!user) {
+            throw new NotFoundException({
+                message: 'User not found'
+            });
+        }
+
+        const token = this.authService.generateJwtForResetPassword(user.email);
+        await this.mailerService.sendMailForPasswordRecover(user.email, token.accessToken);
+
+        return {
+            message: 'Email sent successfully'
+        }
     }
 }

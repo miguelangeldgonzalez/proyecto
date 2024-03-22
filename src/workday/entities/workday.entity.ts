@@ -95,5 +95,11 @@ export class Workday extends TimeStamps {
         }
     })
     volunteers: Volunteer[];
+
+    /**
+     * This is not a column in the database, is used to
+     * set the total by a count of the workday_volunteer table
+     */
+    totalVolunteers: number;
 }
 

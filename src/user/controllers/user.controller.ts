@@ -1,15 +1,19 @@
-import { Body, Controller, Delete, ForbiddenException, Get, Param, Patch, Post, Req, UseGuards } from '@nestjs/common';
+import { 
+    Body, Controller, Delete, ForbiddenException, 
+    Get, Param, Patch, Post, Req, UseGuards 
+} from '@nestjs/common';
 
 // Auth
 import { RoleGuard } from 'src/auth/guards/role.guard';
-import { JwtAuthGuard, JwtCreateUserReturn, JwtUser } from 'src/auth/guards/jwt-auth.guard';
+import { Roles } from 'src/auth/decorators/role.decorator';
+import { Public } from 'src/auth/decorators/public.decorator';
+import { JwtAuthGuard, JwtCreateUserReturn, JwtUser, JwtForgotPasswordReturn } from 'src/auth/guards/jwt-auth.guard';
 
 // Entities
 import { User } from '../entities/user.entity';
 import { RoleNames } from 'src/auth/entities/role.entity';
 
 import { UserService } from '../services/user.service';
-import { Roles } from 'src/auth/decorators/role.decorator';
 import { CreateUserDtoRequest, SetUserPasswordDto } from '../dtos/user.dto';
 
 @UseGuards(JwtAuthGuard, RoleGuard)
@@ -56,6 +60,11 @@ export class UserController {
         return await this.userService.setPassword(body, user.userId);
     }
 
+    @Patch('reset-password')
+    async resetPassword(@Body() { password }: SetUserPasswordDto, @Req() { user }: JwtForgotPasswordReturn) {
+        return await this.userService.resetPassword(password, user.email);
+    }
+
     @Roles(RoleNames.ADMIN, RoleNames.STATE_MANAGER)
     @Get()
     async getAll(@Req() { user }: { user: JwtUser }): Promise<User[]> {
@@ -72,5 +81,11 @@ export class UserController {
     @Get('/resend-token/:id')
     async resendToken(@Param('id') id: number) {
         return await this.userService.resendToken(id);
+    }
+
+    @Public()
+    @Post('/forgot-password')
+    async forgotPassword(@Body() { email }: { email: string }) {
+        return await this.userService.forgotPassword(email);
     }
 }

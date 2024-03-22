@@ -1,4 +1,4 @@
-import { FindOptionsOrder, FindOptionsWhere, In, MoreThanOrEqual, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, In, MoreThanOrEqual, Repository, EntityManager } from 'typeorm';
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
@@ -19,16 +19,27 @@ export class WorkdayService {
         @InjectRepository(MediaType) private mediaTypeRepo: Repository<MediaType> ,
         @InjectRepository(ExternalAssistance) private externalAssistanceRepo: Repository<ExternalAssistance>
     ) {}
+
+    /** 
+     * Calculate the number of volunteers in a workday
+     * @return {number} 
+    */
+    async calculateVolunteers(workdayId: number): Promise<number> {
+        const count = await this.workdayRepo.query('SELECT COUNT(*) FROM workday_volunteer WHERE workday_id = $1', [workdayId]);
+        return parseInt(count[0].count) || 0;
+    }
     
     /**
      * Get a workday by id
      * @param workdayId 
      */
-    async getById(workdayId: number) {
+    async getById(workdayId: number): Promise<Workday> {
         const w =  await this.workdayRepo.findOne({
             where: { id: workdayId },
             relations: ['mediaTypes', 'externalAssistance', 'workdayLocation', 'workdayLocation.borough']
         });
+
+        w.totalVolunteers = await this.calculateVolunteers(workdayId);
 
         if (!w) throw new NotFoundException(`No se encontró la jornada con el id ${workdayId}`);
 

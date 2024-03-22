@@ -24,6 +24,13 @@ export class AuthService {
         }
     }
 
+    generateJwtForResetPassword(email: string) {
+        const accessToken = this.jwtService.sign({ email, resetPassword: true });
+        return {
+            accessToken
+        }
+    }
+
     /**
      * Verify if a token was signed by the JWT_SECRET
      * @param token 
