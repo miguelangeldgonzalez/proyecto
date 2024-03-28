@@ -19,6 +19,7 @@ const workday_module_1 = require("./workday/workday.module");
 const location_module_1 = require("./location/location.module");
 const database_module_1 = require("./database/database.module");
 const volunteer_module_1 = require("./volunteer/volunteer.module");
+const analytics_module_1 = require("./analytics/analytics.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -31,7 +32,8 @@ AppModule = __decorate([
             }),
             location_module_1.LocationModule, database_module_1.DatabaseModule,
             workday_module_1.WorkdayModule, volunteer_module_1.VolunteerModule,
-            user_module_1.UserModule, auth_module_1.AuthModule, mailer_module_1.MailerModule
+            user_module_1.UserModule, auth_module_1.AuthModule, mailer_module_1.MailerModule,
+            analytics_module_1.AnalyticsModule
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

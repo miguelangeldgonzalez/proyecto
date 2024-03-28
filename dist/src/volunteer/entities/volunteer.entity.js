@@ -50,7 +50,8 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         name: 'birth_date',
-        nullable: true
+        nullable: true,
+        type: 'time without time zone'
     }),
     __metadata("design:type", Date)
 ], Volunteer.prototype, "birthDate", void 0);
