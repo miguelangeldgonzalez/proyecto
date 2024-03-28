@@ -39,7 +39,8 @@ export class Volunteer extends TimeStamps {
 
     @Column({
         name: 'birth_date',
-        nullable: true
+        nullable: true,
+        type: 'time without time zone'
     })
     birthDate: Date;
 

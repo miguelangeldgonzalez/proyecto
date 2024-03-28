@@ -14,6 +14,7 @@ import { WorkdayModule } from './workday/workday.module';
 import { LocationModule } from './location/location.module';
 import { DatabaseModule } from './database/database.module';
 import { VolunteerModule } from './volunteer/volunteer.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -24,7 +25,8 @@ import { VolunteerModule } from './volunteer/volunteer.module';
     }),
     LocationModule, DatabaseModule, 
     WorkdayModule, VolunteerModule, 
-    UserModule, AuthModule, MailerModule
+    UserModule, AuthModule, MailerModule, 
+    AnalyticsModule
   ],
   controllers: [AppController],
   providers: [AppService],
